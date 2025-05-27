@@ -1,0 +1,5 @@
+| id    | afirmação                                                              | resposta | explicação                                                                                                                                 |
+| ----- | ---------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| dc001 | A República Federativa do Brasil tem como fundamento a soberania.      | V        | Correto. Conforme Art. 1º, I, da CF/88, a soberania é um dos fundamentos da República Federativa do Brasil.                                |
+| dc002 | Os analfabetos são absolutamente incapazes para os atos da vida civil. | F        | Errado. Analfabetos são plenamente capazes para os atos da vida civil. A restrição é quanto ao alistamento eleitoral e voto (facultativo). |
+| dc003 | É livre a manifestação do pensamento, sendo vedado o anonimato.        | V        | Correto. Art. 5º, IV, da CF/88. O anonimato é vedado para permitir a responsabilização por eventuais abusos.                               |

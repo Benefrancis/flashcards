@@ -1,0 +1,27 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    // ADIÇÕES/MODIFICAÇÕES IMPORTANTES:
+    "moduleResolution": "bundler", // Ou "node16", "nodenext". "Bundler" é geralmente o melhor para Vite.
+    "types": ["vite/client", "node"], // Garanta que "node" esteja aqui. "vite/client" já deve cobrir import.meta.url
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // "erasableSyntaxOnly": true, // Considere mudar para "verbatimModuleSyntax": true, se recomendado pelo seu linter/setup.
+    // Se "erasableSyntaxOnly" está funcionando e não causa problemas com "node:url", pode manter.
+    "verbatimModuleSyntax": true, // Opção mais moderna e recomendada em vez de erasableSyntaxOnly
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts"] // ADICIONE vite.config.ts AQUI
+}
