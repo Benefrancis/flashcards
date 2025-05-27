@@ -90,7 +90,7 @@ watch(() => props.cardData, (newData) => {
             @keyup.enter="checkAnswerAndFlip" placeholder="V ou F" maxlength="1" ref="answerInput"
             aria-label="Digite V para Verdadeiro ou F para Falso" />
           <button @click="checkAnswerAndFlip"
-            :disabled="!userAnswer.trim() || !['V', 'F'].includes(userAnswer.toUpperCase())">     Responder      </button>
+            :disabled="!userAnswer.trim() || !['V', 'F'].includes(userAnswer.toUpperCase())"> Responder </button>
         </div>
       </div>
       <div class="flashcard-back">
@@ -113,11 +113,9 @@ watch(() => props.cardData, (newData) => {
 <style scoped>
 .flashcard {
   width: 100%;
-  /* AUMENTADO para ocupar mais espaço na tela */
   display: flex;
   flex-direction: column;
   min-height: 400px;
-  /* AUMENTADO para dar mais altura ao card */
   perspective: 1000px;
   margin-bottom: 20px;
   cursor: default;
@@ -161,31 +159,42 @@ watch(() => props.cardData, (newData) => {
 }
 
 .statement {
-  font-size: 1.3em;
-  /* AUMENTADO tamanho da fonte da afirmação */
+  font-family: var(--font-family-statement);
+  font-size: clamp(1.3em, 1.2em + 0.5vw, 2.3em);
   line-height: 1.65;
-  /* AUMENTADO espaçamento entre linhas */
   text-align: center;
-  /* CENTRALIZADO horizontalmente */
   width: 100%;
   margin-bottom: 25px;
-  /* AUMENTADO margem inferior */
   flex-grow: 1;
   overflow-y: auto;
   min-height: 100px;
-  /* AUMENTADO min-height para o texto */
   padding-bottom: 15px;
   display: flex;
-  /* Para centralizar o span verticalmente */
   align-items: center;
-  /* Centraliza o span verticalmente */
   justify-content: center;
-  /* Centraliza o span horizontalmente */
+
+  @media (min-width: 768px) {
+
+    /* Telas médias (tablets) */
+    .statement {
+      font-size: 1.4em;
+    }
+  }
+
+  @media (min-width: 1024px) {
+
+    /* Telas grandes (desktops) */
+    .statement {
+      font-size: 1.6em;
+    }
+  }
 }
 
 .statement span {
   /* Para controle fino do texto dentro do P, se necessário */
   display: inline-block;
+  max-width: 100%;
+
 }
 
 
@@ -283,7 +292,13 @@ watch(() => props.cardData, (newData) => {
 
 .answer-status {
   font-weight: bold;
-  font-size: 1.25em;
+  font-size: clamp(1.3em, 1.2em + 0.5vw, 2.5em);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* font-size: 1.25em; */
   /* AUMENTADO */
 }
 
@@ -294,4 +309,57 @@ watch(() => props.cardData, (newData) => {
 .answer-status.incorrect {
   color: var(--color-error);
 }
+
+
+/* ... (todo o seu CSS anterior do Flashcard.vue) ... */
+
+/* Adicione esta media query no FINAL do seu <style scoped> */
+@media (min-width: 1920px) {
+  .flashcard {
+    /* Se quiser que o card em si seja ainda maior em telas ultra-largas */
+    /* max-width: 800px; */ /* Exemplo, ajuste conforme necessário */
+    /* min-height: 500px; */ /* Exemplo */
+    max-height: 80vh; /* Pode permitir um pouco mais de altura na viewport */
+  }
+
+  .flashcard-front,
+  .flashcard-back {
+    padding: 40px; /* Padding interno ainda maior */
+  }
+
+  .statement {
+    /* Você pode definir um font-size fixo maior ou um novo clamp com valores maiores */
+    font-size: 2.2em; /* Exemplo de tamanho fixo maior */
+    /* Ou, se quiser manter alguma fluidez, mas com uma base maior: */
+    /* font-size: clamp(1.8em, 1.8em + 0.5vw, 2.8em); */
+    line-height: 1.8; /* Pode precisar ajustar a altura da linha */
+    margin-bottom: 40px; /* Mais espaço abaixo */
+    min-height: 150px; /* Mais espaço mínimo para o texto */
+  }
+
+  .explanation {
+    font-size: 1.6em; /* Exemplo de tamanho fixo maior */
+    /* Ou: */
+    /* font-size: clamp(1.3em, 1.3em + 0.3vw, 1.8em); */
+    line-height: 1.8;
+  }
+
+  .actions input[type="text"] {
+    padding: 14px;
+    margin-right: 18px;
+    width: 100px;
+    font-size: 1.3em;
+  }
+
+  .actions button,
+  .flashcard-back .flip-back-button {
+    padding: 14px 25px;
+    font-size: 1.2em;
+  }
+
+  .answer-status {
+    font-size: 1.5em;
+  }
+}
+
 </style>

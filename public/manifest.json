@@ -10,5 +10,11 @@
     "name": "Português (Cebraspe)",
     "file": "convencao_teera.md",
     "description": "Tópicos comuns de português cobrados pela banca Cebraspe."
+  },
+  {
+    "id": "lei-morgan",
+    "name": "Lei de Morgan (Cebraspe)",
+    "file": "quix-lei-de-morgan.md",
+    "description": "Tópicos comuns de Lógica (Leis de Morgan) cobrados pela banca Cebraspe."
   }
 ]
