@@ -7,8 +7,8 @@
   },
   {
     "id": "portugues-cebraspe",
-    "name": "Português (Cebraspe)",
-    "file": "convencao_teera.md",
+    "name": "Português (STM)",
+    "file": "portugues-stm.md",
     "description": "Tópicos comuns de português cobrados pela banca Cebraspe."
   },
   {
@@ -16,5 +16,23 @@
     "name": "Lei de Morgan (Cebraspe)",
     "file": "quix-lei-de-morgan.md",
     "description": "Tópicos comuns de Lógica (Leis de Morgan) cobrados pela banca Cebraspe."
+  },
+  {
+    "id": "lei-8457-1992",
+    "name": "Lei 8457/92 OJM (Cebraspe)",
+    "file": "lei-8457-1992.md",
+    "description": "Organização da Justiça Militar (OJM) e a Lei 8457/92, cobrados pela banca Cebraspe."
+  },
+  {
+    "id": "lei-8457-1992",
+    "name": "Política de Prevenção ao Assédio - Lei 8457/92 OJM (Cebraspe)",
+    "file": "quix-assedio.md",
+    "description": "Resolução CNJ nº 351/2020 (Política de Prevenção ao Assédio Moral e Sexual no Judiciário)."
+  },
+  {
+    "id": "sustentabilidade-judiciario",
+    "name": "A política de sustentabilidade no âmbito do Poder Judiciário",
+    "file": "quix-meio-ambiente.md",
+    "description": "Resolução CNJ nº 400/2021 (A política de sustentabilidade no âmbito do Poder Judiciário)."
   }
 ]

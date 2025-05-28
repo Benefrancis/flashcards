@@ -1,96 +1,110 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from 'vue';
 import type { FlashcardData } from '@/types';
+// Não precisamos mais de @vueuse/gesture ou @vueuse/motion aqui
 
 const props = defineProps<{
   cardData: FlashcardData;
-  autoFocusInput?: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: 'answered', payload: { cardId: string; correct: boolean }): void;
+  (e: 'answered', payload: { cardId: string; correct: boolean; direction: 'V' | 'F' }): void;
+  (e: 'skipNext'): void; // Necessário para navegação por seta
+  (e: 'skipPrev'): void; // Necessário para navegação por seta
 }>();
 
 const isFlipped = ref(false);
-const userAnswer = ref('');
 const lastUserAnswer = ref('');
 const isCorrect = ref(false);
-const answerInput = ref<HTMLInputElement | null>(null);
+const cardElement = ref<HTMLElement | null>(null);
+
+// Não precisamos mais das constantes de swipe ou springStyle
+
+const processAnswer = (answer: 'V' | 'F') => {
+  if (isFlipped.value || !props.cardData) return;
+  lastUserAnswer.value = answer;
+  isCorrect.value = answer === props.cardData.resposta?.toUpperCase();
+  emit('answered', { cardId: props.cardData.id, correct: isCorrect.value, direction: answer });
+  if (!isFlipped.value) {
+    isFlipped.value = true;
+  }
+};
 
 const flipCard = () => {
-  console.log('flipCard chamado. isFlipped antes:', isFlipped.value);
   isFlipped.value = !isFlipped.value;
-  console.log('isFlipped depois:', isFlipped.value);
-  if (!isFlipped.value) {
-    userAnswer.value = '';
-    focusInput();
+  if (!isFlipped.value && cardElement.value && document.activeElement !== cardElement.value) {
+    cardElement.value.focus();
   }
 };
 
-const focusInput = async () => {
-  if (props.autoFocusInput && answerInput.value) {
-    await nextTick();
-    answerInput.value.focus();
-  }
-};
+const handleCardKeyInput = (event: KeyboardEvent) => {
+  // Não previne o default aqui ainda, apenas se uma ação for tomada
 
-const handleInputKey = (event: KeyboardEvent) => {
-  console.log('handleInputKey disparado:', event.key); // LOG PARA DEBUG
-  const key = event.key.toUpperCase();
-  if (key === 'V' || key === 'F') {
-    userAnswer.value = key; // Isso já é feito pelo v-model e @input
-    console.log('userAnswer definido para:', userAnswer.value); // LOG PARA DEBUG
-    checkAnswerAndFlip();
-  } else if (event.key.length === 1 && !['ENTER', 'BACKSPACE', 'DELETE', 'TAB', 'SHIFT', 'ALT', 'CONTROL', 'META', 'ESCAPE', 'ARROWLEFT', 'ARROWRIGHT', 'ARROWUP', 'ARROWDOWN'].includes(event.key.toUpperCase()) && !(event.ctrlKey || event.metaKey || event.altKey)) {
-    userAnswer.value = '';
-  }
-};
+  const key = event.key.toUpperCase(); // Usar event.key para "Space" e setas
+  const code = event.code; // Usar event.code para "Space" é mais confiável
 
-const checkAnswerAndFlip = () => {
-  console.log('checkAnswerAndFlip chamado. userAnswer:', userAnswer.value); // LOG PARA DEBUG
-  if (!userAnswer.value.trim() || !['V', 'F'].includes(userAnswer.value.toUpperCase())) {
-    console.log('checkAnswerAndFlip: Condição não satisfeita, retornando.'); // LOG PARA DEBUG
-    return;
+  if (!isFlipped.value) { // Ações para a FRENTE do card
+    if (key === 'V' || key === 'F') {
+      event.preventDefault(); // Previne digitação em outros inputs se o card estiver focado
+      processAnswer(key as 'V' | 'F');
+    } else if (code === 'Space') { // Tecla Espaço para virar (se estiver na frente)
+      event.preventDefault();
+      flipCard(); // Vira para mostrar a resposta sem responder
+      // ou poderia chamar processAnswer com uma resposta "neutra" se quisesse
+      // mas só virar parece mais intuitivo para "ver a resposta"
+    }
+  } else { // Ações para o VERSO do card
+    if (code === 'Space') { // Tecla Espaço para virar de volta
+      event.preventDefault();
+      flipCard();
+    }
   }
 
-  lastUserAnswer.value = userAnswer.value.toUpperCase();
-  isCorrect.value = lastUserAnswer.value === props.cardData.resposta.toUpperCase();
-  emit('answered', { cardId: props.cardData.id, correct: isCorrect.value });
-
-  if (!isFlipped.value) {
-    console.log('checkAnswerAndFlip: Virando o card.'); // LOG PARA DEBUG
-    isFlipped.value = true;
-  } else {
-    console.log('checkAnswerAndFlip: Card já estava virado ou condição não atingida para virar.'); // LOG PARA DEBUG
+  // Ações de navegação (funcionam em qualquer lado do card)
+  if (event.key === 'ArrowRight') { // Seta para Direita
+    event.preventDefault();
+    emit('skipNext');
+  } else if (event.key === 'ArrowLeft') { // Seta para Esquerda
+    event.preventDefault();
+    emit('skipPrev');
   }
+  // Poderia adicionar ArrowUp/ArrowDown para alguma outra ação se quisesse
 };
 
 onMounted(() => {
-  focusInput();
+  if (cardElement.value) {
+    cardElement.value.focus();
+  }
 });
 
 watch(() => props.cardData, (newData) => {
-  console.log('Nova cardData no Flashcard.vue:', newData.id, newData.afirmacao);
   isFlipped.value = false;
-  userAnswer.value = '';
   lastUserAnswer.value = '';
   isCorrect.value = false;
-  focusInput();
+  if (newData && cardElement.value) {
+    nextTick(() => {
+      cardElement.value?.focus();
+    });
+  }
 }, { immediate: true });
 
 </script>
 
 <template>
-  <div class="flashcard" :class="{ 'is-flipped': isFlipped }" @dblclick="flipCard" role="region" aria-live="polite">
+  <div ref="cardElement" class="flashcard" :class="{ 'is-flipped': isFlipped }" @dblclick="flipCard"
+    @keyup="handleCardKeyInput" tabindex="0" role="region" aria-live="polite">
     <div class="flashcard-inner">
       <div class="flashcard-front">
-        <p class="statement"><span>{{ cardData.afirmacao }}</span></p>
-        <div class="actions">
-          <input type="text" v-model="userAnswer" @input="userAnswer = userAnswer.toUpperCase()" @keyup="handleInputKey"
-            @keyup.enter="checkAnswerAndFlip" placeholder="V ou F" maxlength="1" ref="answerInput"
-            aria-label="Digite V para Verdadeiro ou F para Falso" />
-          <button @click="checkAnswerAndFlip"
-            :disabled="!userAnswer.trim() || !['V', 'F'].includes(userAnswer.toUpperCase())"> Responder </button>
+        <p class="statement"><span>{{ cardData?.afirmacao }}</span></p>
+        <div class="actions icon-actions">
+          <button @click="processAnswer('F')" class="action-button incorrect-button"
+            aria-label="Responder Errado (F) ou tecla F">
+            ❌
+          </button>
+          <button @click="processAnswer('V')" class="action-button correct-button"
+            aria-label="Responder Certo (V) ou tecla V">
+            ✔️
+          </button>
         </div>
       </div>
       <div class="flashcard-back">
@@ -98,11 +112,15 @@ watch(() => props.cardData, (newData) => {
           <p class="answer-status" :class="isCorrect ? 'correct' : 'incorrect'">
             Sua resposta: {{ lastUserAnswer }} - {{ isCorrect ? 'Correta!' : 'Incorreta!' }}
           </p>
-          <p><strong>Resposta Correta:</strong> {{ cardData.resposta.toUpperCase() }}</p>
-          <p class="explanation"><strong>Explicação:</strong> {{ cardData.explicacao }}</p>
+          <p><strong>Resposta Correta:</strong> {{ cardData?.resposta?.toUpperCase() }}</p>
+          <p class="explanation"><strong>Explicação:</strong> {{ cardData?.explicacao }}</p>
         </div>
         <div class="back-content-wrapper" v-else>
-          <p>Responda na frente do card para ver a explicação.</p>
+
+          <p><strong>Resposta Correta:</strong> {{ cardData?.resposta?.toUpperCase() }}</p>
+          <p class="explanation"><strong>Explicação:</strong> {{ cardData?.explicacao }}</p>
+          <p style="margin-top: 15px; font-style: italic; text-align: center;">(Use os botões ou V/F para registrar sua
+            resposta)</p>
         </div>
         <button @click="flipCard" class="flip-back-button">Voltar</button>
       </div>
@@ -110,15 +128,24 @@ watch(() => props.cardData, (newData) => {
   </div>
 </template>
 
+
 <style scoped>
 .flashcard {
   width: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 400px;
+  min-height: 500px;
+  height: 100%;
   perspective: 1000px;
-  margin-bottom: 20px;
   cursor: default;
+  touch-action: none;
+  user-select: none;
+  position: relative;
+  outline: none;
+}
+
+.flashcard:focus-visible {
+  box-shadow: 0 0 0 3px var(--primary-color), 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .flashcard-inner {
@@ -128,10 +155,10 @@ watch(() => props.cardData, (newData) => {
   display: flex;
   flex-direction: column;
   text-align: center;
-  transition: transform 0.6s;
+  transition: transform 0.6s ease-in-out;
   transform-style: preserve-3d;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
   background-color: var(--card-bg-color);
 }
 
@@ -151,68 +178,95 @@ watch(() => props.cardData, (newData) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 28px;
-  /* AUMENTADO Padding interno */
+  padding: 30px;
   box-sizing: border-box;
-  border-radius: 12px;
+  border-radius: 16px;
   color: var(--card-text-color);
 }
 
 .statement {
   font-family: var(--font-family-statement);
-  font-size: clamp(1.3em, 1.2em + 0.5vw, 2.3em);
-  line-height: 1.65;
+  font-size: clamp(1.1em, 1.2em + 0.7vw, 1.9em);
+  line-height: 1.7;
   text-align: center;
   width: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   flex-grow: 1;
   overflow-y: auto;
-  min-height: 100px;
   padding-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (min-width: 768px) {
-
-    /* Telas médias (tablets) */
-    .statement {
-      font-size: 1.4em;
-    }
-  }
-
-  @media (min-width: 1024px) {
-
-    /* Telas grandes (desktops) */
-    .statement {
-      font-size: 1.6em;
-    }
-  }
+  color: var(--card-text-color);
 }
 
 .statement span {
-  /* Para controle fino do texto dentro do P, se necessário */
   display: inline-block;
   max-width: 100%;
-
 }
 
-
-.actions {
+.actions.icon-actions {
   padding-top: 20px;
-  /* AUMENTADO padding */
   width: 100%;
-  max-width: 320px;
-  /* AUMENTADO */
+  max-width: 240px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  /* Espaço entre os botões de ícone */
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.action-button {
+  background-color: transparent;
+  border: 3px solid;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  font-size: 2.2em;
+  line-height: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  /* Adicionada transição para color e border-color */
+  padding: 0;
 }
 
-/* --- CSS PARA A PARTE DE TRÁS --- */
+.action-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.action-button:active {
+  transform: scale(1.02);
+}
+
+.action-button.incorrect-button {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.action-button.incorrect-button:hover {
+  background-color: var(--color-error);
+  color: var(--card-bg-color);
+}
+
+.action-button.correct-button {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.action-button.correct-button:hover {
+  background-color: var(--color-success);
+  color: var(--card-bg-color);
+}
+
 .flashcard-back {
   transform: rotateY(180deg);
+  justify-content: space-between;
 }
 
 .back-content-wrapper {
@@ -222,84 +276,42 @@ watch(() => props.cardData, (newData) => {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  /* AUMENTADO gap */
+  gap: 16px;
   padding-bottom: 15px;
-  min-height: 100px;
-  /* AUMENTADO min-height */
 }
 
 .explanation {
-  font-size: 1.15em;
-  /* AUMENTADO fonte da explicação */
-  line-height: 1.65;
+  font-family: var(--font-family-explanation);
+  font-size: clamp(1em, 1.05em + 0.3vw, 1.4em);
+  line-height: 1.7;
+  color: var(--card-text-color);
 }
 
 .flashcard-back .flip-back-button {
   margin-top: 20px;
-  /* AUMENTADO */
   flex-shrink: 0;
-}
-
-/* Inputs e Botões */
-.actions input[type="text"] {
-  padding: 12px;
-  /* AUMENTADO */
-  margin-right: 15px;
-  /* AUMENTADO */
-  width: 80px;
-  /* AUMENTADO */
-  font-size: 1.1em;
-  /* AUMENTADO */
-  text-align: center;
-  text-transform: uppercase;
-  border: 1px solid var(--input-border-color);
-  background-color: var(--input-bg-color);
-  color: var(--input-text-color);
-  border-radius: 8px;
-  /* AUMENTADO */
-}
-
-.actions input[type="text"]:focus {
-  outline: 2px solid var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.actions button,
-.flashcard-back .flip-back-button {
   padding: 12px 20px;
-  /* AUMENTADO */
   font-size: 1em;
-  /* AUMENTADO */
+  font-family: var(--font-family-base);
   background-color: var(--button-primary-bg-color);
   color: white;
   border: none;
   border-radius: 8px;
-  /* AUMENTADO */
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.actions button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.actions button:hover:not(:disabled),
 .flashcard-back .flip-back-button:hover {
   background-color: var(--button-primary-hover-bg-color);
 }
 
 .answer-status {
+  font-family: var(--font-family-base);
   font-weight: bold;
-  font-size: clamp(1.3em, 1.2em + 0.5vw, 2.5em);
-
+  font-size: 2em;
   display: flex;
-  align-items: center;
   justify-content: center;
-
-  /* font-size: 1.25em; */
-  /* AUMENTADO */
+  align-items: center;
 }
 
 .answer-status.correct {
@@ -310,48 +322,33 @@ watch(() => props.cardData, (newData) => {
   color: var(--color-error);
 }
 
-
-/* ... (todo o seu CSS anterior do Flashcard.vue) ... */
-
-/* Adicione esta media query no FINAL do seu <style scoped> */
 @media (min-width: 1920px) {
   .flashcard {
-    /* Se quiser que o card em si seja ainda maior em telas ultra-largas */
-    /* max-width: 800px; */ /* Exemplo, ajuste conforme necessário */
-    /* min-height: 500px; */ /* Exemplo */
-    max-height: 80vh; /* Pode permitir um pouco mais de altura na viewport */
+    max-height: 80vh;
   }
 
   .flashcard-front,
   .flashcard-back {
-    padding: 40px; /* Padding interno ainda maior */
+    padding: 40px;
   }
 
   .statement {
-    /* Você pode definir um font-size fixo maior ou um novo clamp com valores maiores */
-    font-size: 2.2em; /* Exemplo de tamanho fixo maior */
-    /* Ou, se quiser manter alguma fluidez, mas com uma base maior: */
-    /* font-size: clamp(1.8em, 1.8em + 0.5vw, 2.8em); */
-    line-height: 1.8; /* Pode precisar ajustar a altura da linha */
-    margin-bottom: 40px; /* Mais espaço abaixo */
-    min-height: 150px; /* Mais espaço mínimo para o texto */
+    font-size: 2.2em;
+    line-height: 1.8;
+    margin-bottom: 40px;
   }
 
   .explanation {
-    font-size: 1.6em; /* Exemplo de tamanho fixo maior */
-    /* Ou: */
-    /* font-size: clamp(1.3em, 1.3em + 0.3vw, 1.8em); */
+    font-size: 1.6em;
     line-height: 1.8;
   }
 
-  .actions input[type="text"] {
-    padding: 14px;
-    margin-right: 18px;
-    width: 100px;
-    font-size: 1.3em;
+  .action-button {
+    width: 80px;
+    height: 80px;
+    font-size: 3em;
   }
 
-  .actions button,
   .flashcard-back .flip-back-button {
     padding: 14px 25px;
     font-size: 1.2em;
@@ -361,5 +358,4 @@ watch(() => props.cardData, (newData) => {
     font-size: 1.5em;
   }
 }
-
 </style>
