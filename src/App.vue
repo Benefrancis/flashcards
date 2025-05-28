@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { DeckInfo, FlashcardData } from '@/types';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onUnmounted, type Ref } from 'vue';
 import DeckSelector from './components/DeckSelector.vue';
 import Flashcard from './components/Flashcard.vue';
 import AppHeader from './components/AppHeader.vue';
 import IconSun from './components/icons/IconSun.vue';
 import IconMoon from './components/icons/IconMoon.vue';
-import IconArrowLeft from './components/icons/IconArrowLeft.vue'; // Importando o ícone de seta
+import IconArrowLeft from './components/icons/IconArrowLeft.vue';
 import { useMarkdownParser } from './composables/useMarkdownParser';
 import { useTheme } from './composables/useTheme';
 
@@ -20,35 +20,77 @@ const {
 
 const currentCardIndex = ref(0);
 
-// Observa mudanças no selectedDeck e carrega o deck selecionado
-watch(selectedDeck, async (newDeck, oldDeck) => { // Marcado como async para o await
+// --- Gerenciamento do Timer do Card ---
+const cardTimerValue = ref(0);
+const cardTimerInterval: Ref<number | undefined> = ref(undefined);
+const isCardTimerPaused = ref(true);
+
+const clearCardTimer = () => {
+  if (cardTimerInterval.value !== undefined) {
+    clearInterval(cardTimerInterval.value);
+    cardTimerInterval.value = undefined;
+  }
+  isCardTimerPaused.value = true;
+};
+
+const startOrResumeCardTimer = () => {
+  clearCardTimer();
+  cardTimerValue.value = 0;
+  isCardTimerPaused.value = false;
+  console.log('App.vue: Timer do card iniciado/resetado.');
+  cardTimerInterval.value = window.setInterval(() => {
+    if (!isCardTimerPaused.value) {
+      cardTimerValue.value++;
+    }
+  }, 1000);
+};
+
+const pauseCardTimer = () => {
+  isCardTimerPaused.value = true;
+  console.log('App.vue: Timer do card pausado.');
+};
+
+// --- Lógica de Navegação e Carga de Deck ---
+const shuffleArray = (array: FlashcardData[]) => {
+  if (!array || array.length === 0) return [];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
+watch(selectedDeck, async (newDeck, oldDeck) => {
+  clearCardTimer();
   console.log('App.vue: selectedDeck mudou de', oldDeck?.name || 'null', 'para', newDeck?.name || 'null');
   if (newDeck) {
     currentCardIndex.value = 0;
-    // loadDeckFromFile agora é parte do composable useMarkdownParser
-    // e ele já define isLoading, error, e cards.value
-    await loadDeckFromFile(newDeck); // Espera o carregamento e parsing
-
+    await loadDeckFromFile(newDeck);
     if (currentDeckCards.value && currentDeckCards.value.length > 0) {
-      console.log('App.vue: Cards carregados, embaralhando...');
-      // Embaralha a cópia do array para não modificar a ref reativa diretamente de forma inesperada
-      // ou, se currentDeckCards.value é o array que queremos modificar:
-      currentDeckCards.value = shuffleArray([...currentDeckCards.value]); // Embaralha uma cópia e reatribui
-      console.log('App.vue: Cards embaralhados.', currentDeckCards.value.map(c => c.id)); // Log para ver a nova ordem
+      const shuffledCards = shuffleArray([...currentDeckCards.value]);
+      currentDeckCards.value = shuffledCards;
+      console.log('App.vue: Cards embaralhados. Total:', currentDeckCards.value.length, 'Primeiro ID:', currentDeckCards.value[0]?.id);
     }
   } else {
     currentDeckCards.value = [];
   }
 }, { immediate: true });
 
-
-
-
 const currentCard = computed<FlashcardData | null>(() => {
-  if (currentDeckCards.value.length > 0 && currentCardIndex.value < currentDeckCards.value.length) {
-    return currentDeckCards.value[currentCardIndex.value];
+  const cards = currentDeckCards.value;
+  const index = currentCardIndex.value;
+  if (cards && cards.length > 0 && index >= 0 && index < cards.length) {
+    return cards[index];
   }
   return null;
+});
+
+watch(currentCard, (newCard, oldCard) => {
+  if (newCard && (!oldCard || newCard.id !== oldCard.id)) {
+    console.log('App.vue: Novo card é:', newCard.id);
+  } else if (!newCard) {
+    clearCardTimer();
+  }
 });
 
 const handleDeckSelected = (deck: DeckInfo) => {
@@ -60,12 +102,14 @@ const goBackToDeckSelection = () => {
 };
 
 const nextCard = () => {
-  if (currentCardIndex.value < currentDeckCards.value.length - 1) {
+  clearCardTimer();
+  if (currentDeckCards.value && currentCardIndex.value < currentDeckCards.value.length - 1) {
     currentCardIndex.value++;
   }
 };
 
 const prevCard = () => {
+  clearCardTimer();
   if (currentCardIndex.value > 0) {
     currentCardIndex.value--;
   }
@@ -73,45 +117,38 @@ const prevCard = () => {
 
 const { currentTheme, toggleTheme } = useTheme();
 
-const TIME_DELAY_CORRECT = 120000;
-const TIME_DELAY_INCORRECT = 120000;
-
 const handleCardAnswered = (payload: { cardId: string, correct: boolean, direction?: 'V' | 'F' }) => {
   console.log(`App.vue: Card ${payload.cardId} respondido: ${payload.correct ? 'Correto' : 'Errado'}`, payload.direction ? `Direção: ${payload.direction}` : '');
-  if (currentCardIndex.value < currentDeckCards.value.length - 1) {
-    const delay = payload.correct ? TIME_DELAY_CORRECT : TIME_DELAY_INCORRECT;
-    setTimeout(() => {
-      nextCard();
-    }, delay);
-  } else {
-    console.log("App.vue: Fim do deck!");
+  pauseCardTimer();
+
+  if (currentDeckCards.value && currentCardIndex.value >= currentDeckCards.value.length - 1 && currentCard.value && payload.cardId === currentCard.value.id) {
+    console.log("App.vue: Fim do deck (após resposta do último card)!");
   }
 };
 
 const handleSkipNext = () => {
-  if (currentCardIndex.value < currentDeckCards.value.length - 1) {
-    nextCard();
-  }
+  nextCard();
 };
 
 const handleSkipPrev = () => {
-  if (currentCardIndex.value > 0) {
-    prevCard();
+  prevCard();
+};
+
+const handleFlashcardFlipped = (isNowFlipped: boolean) => {
+  if (isNowFlipped) {
+    pauseCardTimer();
+  } else {
+    startOrResumeCardTimer();
   }
 };
 
-// Função para embaralhar o array de cards (Fisher-Yates shuffle)
-const shuffleArray = (array: FlashcardData[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]]; // Troca os elementos
-  }
-  return array; // Retorna o array embaralhado (modifica o original)
+const handleFlashcardFrontShown = () => {
+  startOrResumeCardTimer();
 };
 
-
-
-
+onUnmounted(() => {
+  clearCardTimer();
+});
 </script>
 
 <template>
@@ -144,6 +181,7 @@ const shuffleArray = (array: FlashcardData[]) => {
 
       <h2 v-if="selectedDeck">{{ selectedDeck.name }}</h2>
 
+
       <div v-if="isLoadingCards" class="loading-message">Carregando cards...</div>
       <div v-if="cardLoadingError" class="error-message">
         Erro ao carregar cards: {{ cardLoadingError }}
@@ -154,20 +192,36 @@ const shuffleArray = (array: FlashcardData[]) => {
       </div>
 
       <div v-if="currentCard" class="flashcard-area">
-        <Flashcard :cardData="currentCard" :key="currentCard.id" @answered="handleCardAnswered"
-          @skipNext="handleSkipNext" @skipPrev="handleSkipPrev" />
+        <Flashcard 
+          :cardData="currentCard" 
+          :key="currentCard.id" 
+          :timerValue="cardTimerValue"
+          :isTimerPaused="isCardTimerPaused" 
+          @answered="handleCardAnswered" 
+          @skipNext="handleSkipNext"
+          @skipPrev="handleSkipPrev" 
+          @flipped="handleFlashcardFlipped" 
+          @frontShown="handleFlashcardFrontShown" />
       </div>
 
       <div v-if="currentCard" class="navigation-controls">
+
+
+
         <button @click="prevCard" :disabled="currentCardIndex === 0">Anterior</button>
-        <span>Card {{ currentCardIndex + 1 }} de {{ currentDeckCards.length }}</span>
-        <button @click="nextCard" :disabled="currentCardIndex >= currentDeckCards.length - 1">Próximo</button>
+        <span>Card {{ currentCardIndex + 1 }} de {{ currentDeckCards ? currentDeckCards.length : 0 }}</span>
+        <button @click="nextCard"
+          :disabled="!currentDeckCards || currentCardIndex >= currentDeckCards.length - 1">Próximo</button>
+
+
+
       </div>
     </div>
   </div>
 </template>
 
 <style>
+/* Seu CSS completo como na última mensagem */
 html,
 body {
   height: 100%;
@@ -226,6 +280,7 @@ body {
   outline-offset: 2px;
 }
 
+
 .deck-active-container {
   width: 100%;
   height: 100%;
@@ -241,7 +296,7 @@ body {
 .study-header-controls {
   width: calc(100% - 40px);
   max-width: 1200px;
-  margin: 0 auto 15px auto;
+  margin: 0 auto 10px auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -254,7 +309,59 @@ body {
   position: relative;
   top: auto;
   right: auto;
-  /* Herda outros estilos de .theme-toggle-button, mas não é 'fixed' */
+}
+
+
+.deck-active-container h2 {
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 1.6em;
+  font-weight: 500;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: calc(100% - 160px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-timer-display {
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  color: var(--text-color);
+  background-color: rgba(128, 128, 128, 0.1);
+  padding: 5px 10px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  height: 28px;
+  line-height: 18px;
+  min-width: 80px;
+  text-align: center;
+}
+
+
+.flashcard-area {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.navigation-controls {
+  padding-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  flex-shrink: 0;
 }
 
 .back-button.icon-button {
@@ -283,50 +390,9 @@ body {
 }
 
 .back-button.icon-button .action-icon {
-  /* Se o SVG tiver a classe action-icon */
   width: 20px;
   height: 20px;
 }
-
-
-.deck-active-container h2 {
-  color: var(--primary-color);
-  margin-top: 0;
-  margin-bottom: 15px;
-  text-align: center;
-  font-size: 1.6em;
-  font-weight: 500;
-  flex-shrink: 0;
-  width: 100%;
-  max-width: calc(100% - 160px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.flashcard-area {
-  width: 100%;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-.navigation-controls {
-  padding-top: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 600px;
-  flex-shrink: 0;
-}
-
-/* .back-button (estilo de texto antigo) removido, pois agora é .back-button.icon-button */
 
 .navigation-controls button {
   padding: 10px 15px;

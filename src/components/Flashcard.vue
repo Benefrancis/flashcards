@@ -1,89 +1,105 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from 'vue';
+import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import type { FlashcardData } from '@/types';
-// Não precisamos mais de @vueuse/gesture ou @vueuse/motion aqui
 
 const props = defineProps<{
   cardData: FlashcardData;
+  timerValue: number;       // PROP RECEBIDA DO APP.VUE
+  isTimerPaused: boolean;   // PROP RECEBIDA DO APP.VUE
 }>();
 
 const emit = defineEmits<{
   (e: 'answered', payload: { cardId: string; correct: boolean; direction: 'V' | 'F' }): void;
-  (e: 'skipNext'): void; // Necessário para navegação por seta
-  (e: 'skipPrev'): void; // Necessário para navegação por seta
+  (e: 'skipNext'): void;
+  (e: 'skipPrev'): void;
+  (e: 'flipped', isNowFlipped: boolean): void;
+  (e: 'frontShown'): void;
 }>();
 
 const isFlipped = ref(false);
 const lastUserAnswer = ref('');
 const isCorrect = ref(false);
 const cardElement = ref<HTMLElement | null>(null);
+const timeTakenToAnswer = ref(0); // Armazena o tempo quando o card é respondido/virado
 
-// Não precisamos mais das constantes de swipe ou springStyle
+const formattedTimer = computed(() => {
+  const displayTime = (isFlipped.value && props.isTimerPaused) ? timeTakenToAnswer.value : props.timerValue;
+  if (displayTime < 0) return "0s";
+
+  const minutes = Math.floor(displayTime / 60);
+  const seconds = displayTime % 60;
+
+  if (minutes > 0) {
+    return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+  }
+  return `${seconds}s`;
+});
 
 const processAnswer = (answer: 'V' | 'F') => {
   if (isFlipped.value || !props.cardData) return;
   lastUserAnswer.value = answer;
   isCorrect.value = answer === props.cardData.resposta?.toUpperCase();
+  timeTakenToAnswer.value = props.timerValue;
   emit('answered', { cardId: props.cardData.id, correct: isCorrect.value, direction: answer });
   if (!isFlipped.value) {
     isFlipped.value = true;
+    emit('flipped', true);
   }
 };
 
 const flipCard = () => {
   isFlipped.value = !isFlipped.value;
+  emit('flipped', isFlipped.value);
   if (!isFlipped.value && cardElement.value && document.activeElement !== cardElement.value) {
     cardElement.value.focus();
+    emit('frontShown');
+  } else if (isFlipped.value) {
+    if (!lastUserAnswer.value) { // Se virou sem responder formalmente
+      timeTakenToAnswer.value = props.timerValue;
+    }
   }
 };
 
 const handleCardKeyInput = (event: KeyboardEvent) => {
-  // Não previne o default aqui ainda, apenas se uma ação for tomada
-
-  const key = event.key.toUpperCase(); // Usar event.key para "Space" e setas
-  const code = event.code; // Usar event.code para "Space" é mais confiável
-
-  if (!isFlipped.value) { // Ações para a FRENTE do card
+  const key = event.key.toUpperCase();
+  const code = event.code;
+  if (!isFlipped.value) {
     if (key === 'V' || key === 'F') {
-      event.preventDefault(); // Previne digitação em outros inputs se o card estiver focado
-      processAnswer(key as 'V' | 'F');
-    } else if (code === 'Space') { // Tecla Espaço para virar (se estiver na frente)
-      event.preventDefault();
-      flipCard(); // Vira para mostrar a resposta sem responder
-      // ou poderia chamar processAnswer com uma resposta "neutra" se quisesse
-      // mas só virar parece mais intuitivo para "ver a resposta"
+      event.preventDefault(); processAnswer(key as 'V' | 'F');
+    } else if (code === 'Space') {
+      event.preventDefault(); flipCard();
     }
-  } else { // Ações para o VERSO do card
-    if (code === 'Space') { // Tecla Espaço para virar de volta
-      event.preventDefault();
-      flipCard();
+  } else {
+    if (code === 'Space') {
+      event.preventDefault(); flipCard();
     }
   }
-
-  // Ações de navegação (funcionam em qualquer lado do card)
-  if (event.key === 'ArrowRight') { // Seta para Direita
-    event.preventDefault();
-    emit('skipNext');
-  } else if (event.key === 'ArrowLeft') { // Seta para Esquerda
-    event.preventDefault();
-    emit('skipPrev');
-  }
-  // Poderia adicionar ArrowUp/ArrowDown para alguma outra ação se quisesse
+  if (event.key === 'ArrowRight') { event.preventDefault(); emit('skipNext'); }
+  else if (event.key === 'ArrowLeft') { event.preventDefault(); emit('skipPrev'); }
 };
 
 onMounted(() => {
-  if (cardElement.value) {
-    cardElement.value.focus();
+  if (cardElement.value) cardElement.value.focus();
+  if (props.cardData && !isFlipped.value) {
+    nextTick(() => { emit('frontShown'); });
   }
 });
 
-watch(() => props.cardData, (newData) => {
-  isFlipped.value = false;
-  lastUserAnswer.value = '';
-  isCorrect.value = false;
+watch(() => props.cardData, (newData, oldData) => {
+  const cardActuallyChanged = !oldData || newData.id !== oldData.id;
+  if (cardActuallyChanged) {
+    isFlipped.value = false;
+    lastUserAnswer.value = '';
+    isCorrect.value = false;
+    timeTakenToAnswer.value = 0;
+    emit('flipped', false);
+  }
   if (newData && cardElement.value) {
     nextTick(() => {
       cardElement.value?.focus();
+      if (cardActuallyChanged && !isFlipped.value) {
+        emit('frontShown');
+      }
     });
   }
 }, { immediate: true });
@@ -94,6 +110,12 @@ watch(() => props.cardData, (newData) => {
   <div ref="cardElement" class="flashcard" :class="{ 'is-flipped': isFlipped }" @dblclick="flipCard"
     @keyup="handleCardKeyInput" tabindex="0" role="region" aria-live="polite">
     <div class="flashcard-inner">
+
+      <div v-if="props.cardData" class="card-timer-display-internal"
+        :class="{ 'paused': props.isTimerPaused && isFlipped }" aria-label="Tempo decorrido">
+        {{ formattedTimer }}
+      </div>
+
       <div class="flashcard-front">
         <p class="statement"><span>{{ cardData?.afirmacao }}</span></p>
         <div class="actions icon-actions">
@@ -116,18 +138,15 @@ watch(() => props.cardData, (newData) => {
           <p class="explanation"><strong>Explicação:</strong> {{ cardData?.explicacao }}</p>
         </div>
         <div class="back-content-wrapper" v-else>
-
           <p><strong>Resposta Correta:</strong> {{ cardData?.resposta?.toUpperCase() }}</p>
           <p class="explanation"><strong>Explicação:</strong> {{ cardData?.explicacao }}</p>
-          <p style="margin-top: 15px; font-style: italic; text-align: center;">(Use os botões ou V/F para registrar sua
-            resposta)</p>
+          <p class="info-text">(Use os botões ou V/F para registrar sua resposta na próxima vez)</p>
         </div>
         <button @click="flipCard" class="flip-back-button">Voltar</button>
       </div>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .flashcard {
@@ -138,8 +157,6 @@ watch(() => props.cardData, (newData) => {
   height: 100%;
   perspective: 1000px;
   cursor: default;
-  touch-action: none;
-  user-select: none;
   position: relative;
   outline: none;
 }
@@ -150,6 +167,7 @@ watch(() => props.cardData, (newData) => {
 
 .flashcard-inner {
   position: relative;
+  /* Essencial para o posicionamento absoluto do timer */
   width: 100%;
   flex: 1;
   display: flex;
@@ -160,6 +178,27 @@ watch(() => props.cardData, (newData) => {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   background-color: var(--card-bg-color);
+}
+
+.card-timer-display-internal {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background-color: rgba(0, 0, 0, 0.35);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+  min-width: 40px;
+  text-align: center;
+}
+
+.card-timer-display-internal.paused {
+  opacity: 0.7;
 }
 
 .flashcard.is-flipped .flashcard-inner {
@@ -179,6 +218,8 @@ watch(() => props.cardData, (newData) => {
   flex-direction: column;
   align-items: center;
   padding: 30px;
+  padding-top: 45px;
+  /* Espaço para o timer */
   box-sizing: border-box;
   border-radius: 16px;
   color: var(--card-text-color);
@@ -212,7 +253,6 @@ watch(() => props.cardData, (newData) => {
   display: flex;
   justify-content: center;
   gap: 40px;
-  /* Espaço entre os botões de ícone */
   align-items: center;
   flex-shrink: 0;
   margin-top: auto;
@@ -231,7 +271,6 @@ watch(() => props.cardData, (newData) => {
   align-items: center;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-  /* Adicionada transição para color e border-color */
   padding: 0;
 }
 
@@ -280,6 +319,14 @@ watch(() => props.cardData, (newData) => {
   padding-bottom: 15px;
 }
 
+.info-text {
+  margin-top: 15px;
+  font-style: italic;
+  text-align: center;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
 .explanation {
   font-family: var(--font-family-explanation);
   font-size: clamp(1em, 1.05em + 0.3vw, 1.4em);
@@ -324,12 +371,14 @@ watch(() => props.cardData, (newData) => {
 
 @media (min-width: 1920px) {
   .flashcard {
-    max-height: 80vh;
+    /* max-height: 80vh; */
   }
 
   .flashcard-front,
   .flashcard-back {
     padding: 40px;
+    padding-top: 50px;
+    /* Aumentar para telas grandes para o timer */
   }
 
   .statement {
@@ -356,6 +405,13 @@ watch(() => props.cardData, (newData) => {
 
   .answer-status {
     font-size: 1.5em;
+  }
+
+  .card-timer-display-internal {
+    top: 18px;
+    /* Ajuste para telas maiores */
+    right: 22px;
+    font-size: 0.9em;
   }
 }
 </style>
