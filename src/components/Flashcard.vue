@@ -134,11 +134,9 @@ watch(() => props.cardData, (newData, oldData) => {
           <p class="answer-status" :class="isCorrect ? 'correct' : 'incorrect'">
             Sua resposta: {{ lastUserAnswer }} - {{ isCorrect ? 'Correta!' : 'Incorreta!' }}
           </p>
-          <p><strong>Resposta Correta:</strong> {{ cardData?.resposta?.toUpperCase() }}</p>
           <p class="explanation"><strong>Explicação:</strong> {{ cardData?.explicacao }}</p>
         </div>
         <div class="back-content-wrapper" v-else>
-          <p><strong>Resposta Correta:</strong> {{ cardData?.resposta?.toUpperCase() }}</p>
           <p class="explanation"><strong>Explicação:</strong> {{ cardData?.explicacao }}</p>
           <p class="info-text">(Use os botões ou V/F para registrar sua resposta na próxima vez)</p>
         </div>

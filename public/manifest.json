@@ -52,5 +52,17 @@
     "name": "Lei 14133/2021 - Licitações e Contratos Administrativos",
     "file": "quix-licitacao.md",
     "description": "Dispõe sobre as normas gerais de licitação e contratação para a Administração Pública."
+  },
+  {
+    "id": "cacd-conferencia-moscou",
+    "name": "Conferência de Moscou (CACD)",
+    "file": "quix-conferencia-de-moscou.md",
+    "description": "A conferência de Moscou, realizada em 1949, é um marco importante na história do Direito Internacional e das Relações Internacionais."
+  },
+  {
+    "id": "cacd-conferencia-teera",
+    "name": "Conferência de Teera (CACD)",
+    "file": "quix-convencao_teera.md",
+    "description": "A Conferência de Teera, realizada em 1945, é um marco importante na história do Direito Internacional e das Relações Internacionais."
   }
 ]
