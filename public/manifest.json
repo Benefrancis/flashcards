@@ -34,5 +34,23 @@
     "name": "A política de sustentabilidade no âmbito do Poder Judiciário",
     "file": "quix-meio-ambiente.md",
     "description": "Resolução CNJ nº 400/2021 (A política de sustentabilidade no âmbito do Poder Judiciário)."
+  },
+  {
+    "id": "acessibilidade-judiciario",
+    "name": "Acessibilidade e inclusão de pessoas com deficiência nos órgãos do Poder Judiciário",
+    "file": "quix-acessibilidade.md",
+    "description": "Resolução CNJ nº 401/2021 (Diretrizes de acessibilidade e inclusão de pessoas com deficiência nos órgãos do Poder Judiciário )."
+  },
+  {
+    "id": "lei-8112-90",
+    "name": "Lei 8112/90 Regime Jurídico dos Servidores Públicos civis da União, das autarquias e das fundações públicas federais.",
+    "file": "quix-lei-8112-90.md",
+    "description": "Dispõe sobre o regime jurídico dos servidores públicos civis da União, das autarquias e das fundações públicas federais."
+  },
+  {
+    "id": "lei-14133-2021",
+    "name": "Lei 14133/2021 - Licitações e Contratos Administrativos",
+    "file": "quix-licitacao.md",
+    "description": "Dispõe sobre as normas gerais de licitação e contratação para a Administração Pública."
   }
 ]
