@@ -1,5 +1,11 @@
 [
   {
+    "id": "raciocinio-logico",
+    "name": "Raciocínio Lógico Matemático",
+    "file": "quix-logica-matematica.md",
+    "description": "Raciocínio Lógico Matemático"
+  },
+  {
     "id": "direito-constitucional",
     "name": "Direito Constitucional (Fundamentos)",
     "file": "direito_constitucional.md",
