@@ -6,6 +6,12 @@
     "description": "Raciocínio Lógico Matemático"
   },
   {
+    "id": "ti-tribunal-pdpj-br",
+    "name": "PDPJ-Br (Plataforma Digital do Poder Judiciário Brasileiro)",
+    "file": "quix-pdpj-br-normativos.md",
+    "description": "Plataforma Digital do Poder Judiciário Brasileiro (PDPJ-Br)"
+  },
+  {
     "id": "direito-constitucional",
     "name": "Direito Constitucional (Fundamentos)",
     "file": "direito_constitucional.md",
