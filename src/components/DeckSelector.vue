@@ -21,9 +21,15 @@ const fetchDecks = async () => {
     isLoading.value = true;
     error.value = null;
     try {
-        const response = await fetch('/manifest.json');
+
+        const manifestPath = `${import.meta.env.BASE_URL}manifest.json`.replace(/\/\//g, '/'); // Evita barras duplas
+    
+        console.log('Tentando buscar manifest de:', manifestPath); // Log para depuração
+
+        const response = await fetch(manifestPath);
+
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status} ao buscar ${manifestPath}`);
         }
         const data: Deck[] = await response.json();
         decks.value = data;

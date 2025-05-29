@@ -95,8 +95,15 @@ export function useMarkdownParser() {
     cards.value = [];
 
     try {
+
+      const deckFilePath = `${import.meta.env.BASE_URL}decks/${deckInfo.file}`.replace(/\/\//g, '/');
+      console.log('Tentando buscar deck de:', deckFilePath); // Log para depuração
+
+      
       // Os arquivos .md estão na pasta `public/decks/`
-      const response = await fetch(`/decks/${deckInfo.file}`);
+      const response = await fetch(deckFilePath);
+
+
       if (!response.ok) {
         throw new Error(
           `Erro ao buscar o arquivo do deck: ${response.status} ${response.statusText}`
