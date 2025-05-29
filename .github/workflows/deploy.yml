@@ -1,0 +1,63 @@
+# .github/workflows/deploy.yml
+
+name: Deploy Vue App to GitHub Pages
+
+# Dispara o workflow em pushes para a branch 'main'
+# e também permite que você rode manualmente pela aba Actions no GitHub
+on:
+  push:
+    branches: [ main ] # Mude para 'master' se essa for sua branch principal
+  workflow_dispatch:
+
+# Define permissões para o GITHUB_TOKEN para permitir o deploy no GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permite apenas um deploy concorrente, cancelando execuções anteriores/pendentes
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 # Use a versão mais recente
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4 # Use a versão mais recente
+        with:
+          node-version: 18 # Ou a versão do Node que seu projeto usa (ex: 18, 20)
+          cache: 'npm' # Ou 'yarn', 'pnpm'
+
+      - name: Install Dependencies
+        run: npm ci # Ou 'yarn install --frozen-lockfile', 'pnpm install --frozen-lockfile'
+
+      - name: Build
+        run: npm run build # Este comando deve gerar a pasta 'dist'
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4 # Use a versão mais recente
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3 # Use a versão mais recente
+        with:
+          # Uploada o conteúdo da pasta 'dist' (ou o nome da sua pasta de build)
+          path: './dist'
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # Use a versão mais recente
