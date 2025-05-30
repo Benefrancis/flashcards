@@ -6,6 +6,12 @@
     "description": "Raciocínio Lógico Matemático"
   },
   {
+    "id": "afo",
+    "name": "AFO - Administração Financeira e Orçamentária",
+    "file": "quix-afo.md",
+    "description": "Administração Financeira e Orçamentária"
+  },
+  {
     "id": "ti-tribunal-pdpj-br",
     "name": "[TI] PDPJ-Br (Plataforma Digital do Poder Judiciário Brasileiro)",
     "file": "quix-pdpj-br-normativos.md",
