@@ -7,9 +7,15 @@
   },
   {
     "id": "ti-tribunal-pdpj-br",
-    "name": "PDPJ-Br (Plataforma Digital do Poder Judiciário Brasileiro)",
+    "name": "[TI] PDPJ-Br (Plataforma Digital do Poder Judiciário Brasileiro)",
     "file": "quix-pdpj-br-normativos.md",
     "description": "Plataforma Digital do Poder Judiciário Brasileiro (PDPJ-Br)"
+  },
+  {
+    "id": "ti-ia",
+    "name": "[TI] Ferramentas de IA",
+    "file": "quix-ferramentas-ia.md",
+    "description": "Um conjunto de ferramentas e bibliotecas fundamentais no ecossistema de Ciência de Dados e Inteligência Artificial em Python"
   },
   {
     "id": "direito-constitucional",
