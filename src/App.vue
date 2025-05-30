@@ -192,16 +192,9 @@ onUnmounted(() => {
       </div>
 
       <div v-if="currentCard" class="flashcard-area">
-        <Flashcard 
-          :cardData="currentCard" 
-          :key="currentCard.id" 
-          :timerValue="cardTimerValue"
-          :isTimerPaused="isCardTimerPaused" 
-          @answered="handleCardAnswered" 
-          @skipNext="handleSkipNext"
-          @skipPrev="handleSkipPrev" 
-          @flipped="handleFlashcardFlipped" 
-          @frontShown="handleFlashcardFrontShown" />
+        <Flashcard :cardData="currentCard" :key="currentCard.id" :timerValue="cardTimerValue"
+          :isTimerPaused="isCardTimerPaused" @answered="handleCardAnswered" @skipNext="handleSkipNext"
+          @skipPrev="handleSkipPrev" @flipped="handleFlashcardFlipped" @frontShown="handleFlashcardFrontShown" />
       </div>
 
       <div v-if="currentCard" class="navigation-controls">
@@ -251,7 +244,8 @@ body {
 
 .theme-toggle-button {
   position: fixed;
-  top: 15px;
+  top: calc((60px - 38px) / 2);
+  /* (AlturaHeader - AlturaBotao) / 2 para centralizar verticalmente */
   right: 20px;
   padding: 6px;
   background-color: transparent;
@@ -267,6 +261,9 @@ body {
   z-index: 1000;
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
 }
+
+
+
 
 .theme-toggle-button:hover {
   background-color: var(--button-primary-hover-bg-color);
@@ -293,29 +290,41 @@ body {
   position: relative;
 }
 
+/* Quando o modo estudo está ativo, o AppHeader some, então o botão de tema
+   dentro de .study-header-controls precisa de seu próprio alinhamento vertical. */
 .study-header-controls {
   width: calc(100% - 40px);
   max-width: 1200px;
-  margin: 0 auto 10px auto;
+  margin: 0 auto;
+  /* Centraliza e o padding do .deck-active-container dá o espaço do topo */
+  padding-top: 15px;
+  /* Espaço no topo para os botões */
+  padding-bottom: 10px;
+  /* Espaço abaixo dos botões, antes do título do deck */
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
   position: relative;
+  /* Mudado de absolute para relative no fluxo */
   z-index: 10;
 }
 
 .study-mode-theme-toggle {
-  position: relative;
-  top: auto;
-  right: auto;
+  /* position: relative; */
+  /* Removido */
+  /* top: auto; */
+  /* Removido */
+  /* right: auto; */
+  /* Removido */
 }
 
 
 .deck-active-container h2 {
   color: var(--primary-color);
-  margin-top: 0;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  /* Espaço após o .study-header-controls */
+  margin-bottom: 15px;
   text-align: center;
   font-size: 1.6em;
   font-weight: 500;
