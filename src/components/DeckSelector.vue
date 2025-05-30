@@ -1,3 +1,4 @@
+// src/components/DeckSelector.vue
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import IconDeck from './icons/IconDeck.vue';
@@ -21,13 +22,8 @@ const fetchDecks = async () => {
     isLoading.value = true;
     error.value = null;
     try {
-
-        const manifestPath = `${import.meta.env.BASE_URL}manifest.json`.replace(/\/\//g, '/'); // Evita barras duplas
-    
-        console.log('Tentando buscar manifest de:', manifestPath); // Log para depuração
-
+        const manifestPath = `${import.meta.env.BASE_URL}manifest.json`.replace(/\/\//g, '/');
         const response = await fetch(manifestPath);
-
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status} ao buscar ${manifestPath}`);
         }
@@ -62,7 +58,7 @@ onMounted(() => {
             <li v-for="deck in decks" :key="deck.id" class="deck-item" @click="selectDeck(deck)" tabindex="0"
                 @keypress.enter="selectDeck(deck)" role="button" :aria-label="`Selecionar deck ${deck.name}`">
                 <div class="deck-item-content">
-                    <IconDeck />
+                    <IconDeck class="deck-item-icon" />
                     <div class="deck-info">
                         <h3>{{ deck.name }}</h3>
                         <p v-if="deck.description">{{ deck.description }}</p>
@@ -78,44 +74,36 @@ onMounted(() => {
 
 <style scoped>
 .deck-selector-container {
-    max-width: 700px;
-    margin: 20px auto; /* Margem geral */
-    padding: 20px 25px; /* Padding interno */
+    width: 100%; /* Ocupa 100% da largura do .main-view-content-wrapper */
+    margin: 0; /* Sem margens, o wrapper pai cuida do espaçamento */
+    padding: 20px; /* Padding interno para o conteúdo do seletor */
     background-color: var(--card-bg-color);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     color: var(--card-text-color);
     display: flex;
     flex-direction: column;
-    /* Altura total do seletor de decks. 
-       Subtrai o padding do #app-container (40px) e uma margem extra (40px) */
-    height: calc(100vh - 80px); 
-    max-height: 700px; /* Limite máximo para telas desktop muito altas */
+    flex-grow: 1; /* Ocupa o espaço vertical disponível no .main-view-content-wrapper */
+    overflow: hidden; /* Força a .deck-list a usar seu próprio scroll */
+    box-sizing: border-box;
 }
 
-/* Ajustes para telas menores (mobile) */
 @media (max-width: 767px) {
   .deck-selector-container {
-    margin: 10px; /* Menos margem lateral em mobile */
-    padding: 15px 20px; /* Menos padding interno */
-    /* Para mobile, tentar usar quase toda altura, considerando barras de navegador e padding do #app-container */
-    /* O padding do #app-container é 20px, então 100vh - 2*20px (topo/baixo do app) - 2*10px (margem do container) */
-    height: calc(100vh - 40px - 20px); 
-    max-height: none; /* Remove o max-height de 700px para mobile, deixando o height controlar */
+    padding: 15px;
   }
   .deck-selector-container h2 {
-    font-size: 1.5em; /* Título menor em mobile */
+    font-size: 1.5em;
     margin-bottom: 15px;
   }
 }
 
-
 .deck-selector-container h2 {
     text-align: center;
     margin-top: 0;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     color: var(--primary-color);
-    font-size: 1.8em;
+    font-size: 1.7em;
     font-weight: 500;
     flex-shrink: 0;
 }
@@ -138,57 +126,39 @@ onMounted(() => {
 
 .deck-list {
     list-style: none;
-    padding: 0;
+    padding: 0 5px 20px 5px; /* Padding lateral para a lista e inferior para o último item */
     margin: 0;
-    overflow-y: auto;
-    flex-grow: 1; /* Faz a lista ocupar o espaço disponível */
-    /* Adiciona padding na parte de baixo DENTRO da área de scroll */
-    padding-bottom: 30px; /* AUMENTADO: Espaço extra no final da lista para garantir visibilidade do último item */
-                           /* Ajuste este valor conforme necessário */
+    overflow-y: auto; /* Barra de rolagem vertical */
+    flex-grow: 1;     /* Lista ocupa o espaço vertical restante */
 }
 
-.deck-list::-webkit-scrollbar {
-    width: 8px;
-}
-.deck-list::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-}
-.deck-list::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
-    border-radius: 4px;
-    border: 2px solid var(--card-bg-color); /* Usar --card-bg-color para o 'track' da borda */
-    background-clip: padding-box;
-}
-.deck-list::-webkit-scrollbar-thumb:hover {
-    background-color: var(--button-primary-hover-bg-color);
-}
-.deck-list {
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) rgba(0,0,0,0.05);
-}
+.deck-list::-webkit-scrollbar { width: 7px; }
+.deck-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); border-radius: 4px; }
+.deck-list::-webkit-scrollbar-thumb { background-color: var(--primary-color); border-radius: 4px; border: 1px solid var(--card-bg-color); background-clip: padding-box; }
+.deck-list::-webkit-scrollbar-thumb:hover { background-color: var(--button-primary-hover-bg-color); }
+.deck-list { scrollbar-width: thin; scrollbar-color: var(--primary-color) rgba(0,0,0,0.03); }
 
 .deck-item {
     background-color: var(--bg-color);
     border: 1px solid var(--input-border-color);
-    padding: 16px 20px; /* Ajustado */
-    margin-bottom: 16px; /* Ajustado */
+    padding: 16px 20px;
+    margin-bottom: 16px;
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 .deck-list li:last-child {
-     /* margin-bottom: 0; */ /* Com padding-bottom na ul, a margem do último item pode não ser mais necessária
-                                ou pode precisar ser ajustada em conjunto com o padding-bottom da ul.
-                                Se o último item ainda estiver cortado, experimente adicionar um margin-bottom aqui.
-                                Ex: margin-bottom: 10px; */
+    margin-bottom: 0;
 }
 
 .deck-item:hover,
 .deck-item:focus,
 .deck-item:focus-visible {
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-color: var(--primary-color);
     outline: none;
 }
@@ -199,21 +169,34 @@ onMounted(() => {
 
 .deck-item-content {
     display: flex;
-    align-items: center;
+    align-items: flex-start; 
+    gap: 10px;
+}
+.deck-item-icon {
+    flex-shrink: 0;
+    margin-top: 2px; 
 }
 .deck-info {
     flex-grow: 1;
+    min-width: 0; /* Permite quebra de linha do texto */
 }
 .deck-item h3 {
     margin-top: 0;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     color: var(--primary-color);
-    font-size: 1.2em; /* Ajustado */
+    font-size: 1.1em;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 .deck-item p {
     margin-bottom: 0;
-    font-size: 0.85em; /* Ajustado */
+    font-size: 0.8em;
     color: var(--text-color);
-    line-height: 1.5;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 </style>

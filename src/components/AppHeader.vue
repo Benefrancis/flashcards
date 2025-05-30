@@ -1,44 +1,93 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useTheme } from '@/composables/useTheme';
+
+
+const logoSrc = computed(() => `${import.meta.env.BASE_URL}q8.png`.replace(/\/\//g, '/'));
+const { currentTheme, toggleTheme } = useTheme();
+</script>
+
 <template>
   <header class="app-header">
-    <img src="/q8.png" alt="logo q8">
+    <div class="logo-container">
+      <img :src="logoSrc" alt="Logo Q8 Concursos" class="header-logo">
+      <span class="header-title-text">Flashcards</span>
+    </div>
+
+    <button @click="toggleTheme" class="theme-toggle-button-header"
+      :aria-label="currentTheme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'" title="Mudar tema">
+
+      <span v-if="currentTheme === 'dark'">☀️</span>
+      <span v-else>🌙</span>
+
+    </button>
   </header>
 </template>
 
-<script setup lang="ts">
-// Nenhum script específico é necessário para este header simples
-</script>
-
 <style scoped>
-/* Em src/components/AppHeader.vue -> <style scoped> */
-
 .app-header {
   width: 100%;
-  padding: 10px 20px; /* Padding vertical e horizontal base */
-  box-sizing: border-box; /* Garante que padding não aumente a largura total */
-  /* background-color: var(--secondary-color); */ /* Você comentou, ok */
-  display: flex; /* Habilita flexbox para alinhar o logo */
-  align-items: center; /* Alinha o logo verticalmente ao centro */
-  /* justify-content: center; */ /* Se quiser o logo centralizado no header */
-  justify-content: flex-start; /* Alinha o logo à esquerda por padrão */
+  /* Ocupa a largura do seu contêiner pai no App.vue (main-view-content-wrapper) */
+  padding: 0 20px;
+  /* Padding lateral interno do header */
+  box-sizing: border-box;
+  background-color: var(--app-header-bg, var(--bg-color));
+  /* Permite sobrescrever ou usa o fundo base */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Logo à esquerda, botão de tema à direita */
   flex-shrink: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra mais sutil */
-  height: 60px; /* Definir uma altura fixa para o header pode ajudar no alinhamento com botões fixos */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+  height: 60px;
+  /* Altura fixa para o header */
 }
 
-.app-header img {
-  max-height: 35px; /* Altura máxima do logo, ajuste conforme o seu logo */
-  /* display: flex; */ /* Não necessário na imagem em si, o pai .app-header já é flex */
-  /* Se quiser um espaço à direita do logo, caso haja outros elementos no header: */
-  /* margin-right: auto; */ /* Empurra outros elementos para a direita */
+.logo-container {
+  display: flex;
+  align-items: center;
 }
 
-/* Se você quiser um título ao lado do logo, poderia ser: */
-/*
-.app-header h1 {
-  margin: 0 0 0 15px; // Margem à esquerda do título, após o logo
-  font-size: 1.4em;
-  font-weight: 500;
-  color: var(--primary-color); // Ou var(--text-color)
+.header-logo {
+  max-height: 30px;
+  width: auto;
+  display: block;
 }
-*/
+
+/* Estilos para um título ao lado do logo */
+
+.header-title-text {
+  margin-left: 15px;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+
+.theme-toggle-button-header {
+  padding: 6px;
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid transparent;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.theme-toggle-button-header:hover {
+  background-color: var(--button-primary-hover-bg-color);
+  color: white;
+  /* transform: scale(1.1); */
+  /* Opcional: leve aumento no hover */
+}
+
+.theme-toggle-button-header:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
 </style>
