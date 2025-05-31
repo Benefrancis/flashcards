@@ -342,12 +342,12 @@ header.app-header {
 
 .flashcard-area {
   width: 100%;
-  flex-grow: 1;
+  flex-grow: 1; /* Ocupa o espaço vertical disponível */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  justify-content: center; /* Centraliza o card verticalmente na área */
+  align-items: center;   /* Centraliza o card horizontalmente */
+  overflow: hidden; 
   margin-bottom: 10px;
 }
 
