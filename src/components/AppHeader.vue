@@ -3,7 +3,8 @@ import { computed } from 'vue';
 import { useTheme } from '@/composables/useTheme';
 
 
-const logoSrc = computed(() => `${import.meta.env.BASE_URL}q8.png`.replace(/\/\//g, '/'));
+const normalizeBaseUrl = (url: string) => url.replace(/\/+$/, '');
+const logoSrc = computed(() => `${normalizeBaseUrl(import.meta.env.BASE_URL)}/images/q8.png`);
 const { currentTheme, toggleTheme } = useTheme();
 </script>
 

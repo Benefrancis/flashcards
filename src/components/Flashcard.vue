@@ -31,7 +31,10 @@ const feedbackImageSrc = computed(() => {
   const imageName = isCorrect.value ? 'check.png' : 'caution.png';
   return `${baseUrl.value}images/${imageName}`.replace(/\/\//g, '/');
 });
-const logoQ8Src = computed(() => `${baseUrl.value}q8.png`.replace(/\/\//g, '/'));
+const logoQ8Src = computed(() => {
+  const normalizedBaseUrl = baseUrl.value.endsWith('/') ? baseUrl.value.slice(0, -1) : baseUrl.value;
+  return `${normalizedBaseUrl}/images/q8.png`;
+});
 
 const formattedTimer = computed(() => {
   const displayTime = (isFlipped.value && props.isTimerPaused) ? timeTakenToAnswer.value : props.timerValue;
@@ -453,9 +456,7 @@ watch(() => props.cardData, (newData, oldData) => {
 }
 
 @media (min-width: 1920px) {
-  .flashcard {
-    /* ... */
-  }
+  .flashcard {/* ... */}
 
   .flashcard-front,
   .flashcard-back {
