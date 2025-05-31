@@ -33,7 +33,7 @@ const feedbackImageSrc = computed(() => {
   const imageName = isCorrect.value ? 'check.png' : 'caution.png';
   return `${baseUrl.value}images/${imageName}`.replace(/\/\//g, '/');
 });
-const logoQ8Src = computed(() => `${baseUrl.value}q8.png`.replace(/\/\//g, '/'));
+const logoQ8Src = computed(() => `${baseUrl.value}images/q8.png`.replace(/\/\//g, '/'));
 
 const formattedTimer = computed(() => {
   // O timer exibido no topo será sempre o props.timerValue se estiver na frente e contando,
