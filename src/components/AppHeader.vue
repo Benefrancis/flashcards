@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useTheme } from '@/composables/useTheme';
-// import IconSun from '@/components/icons/IconSun.vue';   // Descomente se for usar o componente de ícone
-// import IconMoon from '@/components/icons/IconMoon.vue'; // Descomente se for usar o componente de ícone
+// Se decidir usar componentes SVG para os ícones de tema:
+// import IconSun from '@/components/icons/IconSun.vue';
+// import IconMoon from '@/components/icons/IconMoon.vue';
 
-// Função para normalizar BASE_URL, removendo barras extras no final
 const normalizeBaseUrl = (url: string) => {
   let normalized = url.replace(/\/+$/, '');
   if (normalized === '') return '/';
@@ -17,7 +17,6 @@ const normalizeBaseUrl = (url: string) => {
   return normalized;
 };
 
-// Caminho para o logo (assumindo que está em public/images/q8.png)
 const logoSrc = computed(() => `${normalizeBaseUrl(import.meta.env.BASE_URL)}/images/q8.png`);
 const { currentTheme, toggleTheme } = useTheme();
 </script>
@@ -31,11 +30,10 @@ const { currentTheme, toggleTheme } = useTheme();
 
     <button @click="toggleTheme" class="theme-toggle-button-header"
       :aria-label="currentTheme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'" title="Mudar tema">
-      <!-- Usando emojis diretamente. Se preferir componentes de ícone: -->  
-      <!-- <IconSun v-if="currentTheme === 'dark'" /> -->
-      <!-- <IconMoon v-else /> -->
       <span v-if="currentTheme === 'dark'">☀️</span>
       <span v-else>🌙</span>
+      <!-- <IconSun v-if="currentTheme === 'dark'" /> -->
+      <!-- <IconMoon v-else /> -->
     </button>
   </header>
 </template>
@@ -43,44 +41,60 @@ const { currentTheme, toggleTheme } = useTheme();
 <style scoped>
 .app-header {
   width: 100%;
-  padding: 0 20px; /* Padding lateral interno do header */
+  padding: 0 20px;
+  /* Padding lateral interno do header */
   box-sizing: border-box;
   background-color: var(--app-header-bg, var(--bg-color));
+  /* Permite tema ou usa fundo base */
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Logo à esquerda, botão de tema à direita */
+  justify-content: space-between;
+  /* Logo à esquerda, botão de tema à direita */
   flex-shrink: 0;
+  /* Importante para não ser esmagado em layouts flex */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
-  height: 60px; /* Altura fixa para o header */
+  height: 60px;
+  /* Altura fixa para o header */
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  overflow: hidden; 
+  overflow: hidden;
+  /* Para o text-overflow do título funcionar */
+  /* flex-grow: 1; Se quisesse que o container do logo tentasse ocupar mais espaço */
+  /* min-width: 0; Para permitir que encolha se necessário */
 }
 
 .header-logo {
   max-height: 30px;
+  /* Altura do seu logo */
   width: auto;
   display: block;
   flex-shrink: 0;
+  /* Logo não encolhe */
 }
 
 .header-title-text {
   margin-left: 12px;
   font-size: 1.3em;
-  font-weight: 500; 
+  font-weight: 500;
   color: var(--primary-color);
+  /* Cor do título */
   white-space: nowrap;
+  /* Impede quebra de linha */
   overflow: hidden;
+  /* Esconde o que não couber */
   text-overflow: ellipsis;
+  /* Adiciona "..." */
+  /* max-width: 250px; */
+  /* Opcional: limite máximo para o título se necessário */
 }
 
 .theme-toggle-button-header {
   padding: 6px;
   background-color: transparent;
-  color: var(--text-color); /* Cor do emoji/ícone herda do texto */
+  color: var(--text-color);
   border: 1px solid transparent;
   border-radius: 50%;
   width: 38px;
@@ -91,11 +105,12 @@ const { currentTheme, toggleTheme } = useTheme();
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
   flex-shrink: 0;
+  /* Botão não encolhe */
 }
 
 .theme-toggle-button-header:hover {
-  background-color: var(--button-primary-hover-bg-color); /* Use sua variável de hover */
-  color: white; /* Para contraste com o fundo do hover */
+  background-color: var(--button-primary-hover-bg-color);
+  color: white;
 }
 
 .theme-toggle-button-header:focus-visible {
@@ -103,10 +118,11 @@ const { currentTheme, toggleTheme } = useTheme();
   outline-offset: 2px;
 }
 
-.theme-toggle-button-header span { /* Para dimensionar os emojis */
-  font-size: 1.2rem; /* Ajuste o tamanho do emoji */
+.theme-toggle-button-header span {
+  /* Para dimensionar os emojis */
+  font-size: 1.2rem;
   line-height: 1;
-  display: flex; /* Para melhor centralização do emoji no botão */
+  display: flex;
   align-items: center;
   justify-content: center;
 }

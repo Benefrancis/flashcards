@@ -1,9 +1,4 @@
 <script setup lang="ts">
-// ... (SEU SCRIPT SETUP ATUAL PODE SER MANTIDO EM GRANDE PARTE) ...
-// A lógica de props, emits, isFlipped, formattedTimer, processAnswer, flipCard,
-// handleCardKeyInput, onMounted, watch permanecem as mesmas.
-// Apenas certifique-se de que as computed properties para os paths das imagens (logoQ8Src, etc.)
-// estão corretas como na sua última versão.
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import type { FlashcardData } from '@/types';
 

@@ -22,7 +22,7 @@ const fetchDecks = async () => {
     error.value = null;
     try {
         const manifestPath = `${import.meta.env.BASE_URL}manifest.json`.replace(/\/\//g, '/');
-        // console.log('DeckSelector: Tentando buscar manifest de:', manifestPath); // Pode manter se quiser log
+        // console.log('DeckSelector: Tentando buscar manifest de:', manifestPath);
         const response = await fetch(manifestPath);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status} ao buscar ${manifestPath}`);
@@ -75,11 +75,9 @@ onMounted(() => {
 <style scoped>
 .deck-selector-container {
     width: 100%;
-    /* Ocupa 100% da largura do .main-view-wrapper no App.vue */
     margin: 0;
-    /* O .main-view-wrapper controla a margem superior (espaço do AppHeader) */
     padding: 20px;
-    /* Padding interno consistente */
+    /* Padding interno para o conteúdo */
     background-color: var(--card-bg-color);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -88,16 +86,14 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    /* Ocupa o espaço vertical disponível no .main-view-wrapper */
     overflow: hidden;
-    /* Força a .deck-list a usar seu próprio scroll */
+    /* Garante que o scroll seja na .deck-list */
     box-sizing: border-box;
 }
 
 @media (max-width: 767px) {
     .deck-selector-container {
         padding: 15px;
-        /* Padding menor em mobile */
     }
 
     .deck-selector-container h2 {
@@ -148,12 +144,10 @@ onMounted(() => {
 .deck-list {
     list-style: none;
     padding: 0 5px 20px 5px;
-    /* Padding lateral leve e padding inferior para o último item */
+    /* Adicionado padding lateral aqui para os itens não colarem na scrollbar */
     margin: 0;
     overflow-y: auto;
-    /* BARRA DE ROLAGEM AQUI */
     flex-grow: 1;
-    /* LISTA OCUPA O ESPAÇO VERTICAL RESTANTE */
     min-height: 0;
     /* Ajuda flex-grow com overflow */
 }

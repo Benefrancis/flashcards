@@ -3,9 +3,11 @@ import type { DeckInfo, FlashcardData } from '@/types';
 import { computed, ref, watch, onUnmounted, type Ref } from 'vue';
 import DeckSelector from './components/DeckSelector.vue';
 import Flashcard from './components/Flashcard.vue';
-import AppHeader from './components/AppHeader.vue'; // AppHeader será modificado para conter logo e botão de tema
-import IconArrowLeft from './components/icons/IconArrowLeft.vue'; // Para o botão de voltar no modo estudo
-// Para o botão de tema no modo estudo
+import AppHeader from './components/AppHeader.vue';
+import IconArrowLeft from './components/icons/IconArrowLeft.vue';
+// Importações de IconSun/IconMoon para o botão de tema no modo estudo
+import IconSun from './components/icons/IconSun.vue';
+import IconMoon from './components/icons/IconMoon.vue';
 import { useMarkdownParser } from './composables/useMarkdownParser';
 import { useTheme } from './composables/useTheme';
 
@@ -19,6 +21,7 @@ const {
 
 const currentCardIndex = ref(0);
 
+// --- Gerenciamento do Timer do Card (Lógica permanece, exibição vai para Flashcard.vue) ---
 const cardTimerValue = ref(0);
 const cardTimerInterval: Ref<number | undefined> = ref(undefined);
 const isCardTimerPaused = ref(true);
@@ -100,7 +103,7 @@ const prevCard = () => {
   }
 };
 
-const { currentTheme, toggleTheme } = useTheme(); // toggleTheme será usado pelo AppHeader e pelo botão no modo estudo
+const { currentTheme, toggleTheme } = useTheme();
 
 const handleCardAnswered = (payload: { cardId: string, correct: boolean, direction?: 'V' | 'F' }) => {
   pauseCardTimer();
@@ -123,9 +126,9 @@ onUnmounted(() => { clearCardTimer(); });
 <template>
   <div id="app-container" :class="{ 'studying-active': selectedDeck }">
     <div class="content-area">
-
+      
       <template v-if="!selectedDeck">
-        <AppHeader />
+        <AppHeader /> 
         <div class="main-view-wrapper">
           <DeckSelector @deckSelected="handleDeckSelected" />
         </div>
@@ -133,21 +136,17 @@ onUnmounted(() => { clearCardTimer(); });
 
       <div v-if="selectedDeck" class="deck-active-container">
         <div class="study-header-controls">
-          <button @click="goBackToDeckSelection" class="back-button icon-button"
-            aria-label="Voltar para seleção de decks" title="Voltar para Decks">
+          <button @click="goBackToDeckSelection" class="back-button icon-button" aria-label="Voltar para seleção de decks"
+            title="Voltar para Decks">
             <IconArrowLeft />
           </button>
           <button @click="toggleTheme" class="theme-toggle-button study-mode-theme-toggle"
             :aria-label="currentTheme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'" title="Mudar tema">
-
-
-            <span v-if="currentTheme === 'dark'">☀️</span>
-            <span v-else>🌙</span>
-
+             <IconSun v-if="currentTheme === 'dark'" />
+             <IconMoon v-else />
           </button>
         </div>
         <h2 v-if="selectedDeck">{{ selectedDeck.name }}</h2>
-  
         <div v-if="isLoadingCards" class="loading-message">Carregando cards...</div>
         <div v-if="cardLoadingError" class="error-message">
           Erro ao carregar cards: {{ cardLoadingError }}
@@ -157,9 +156,16 @@ onUnmounted(() => { clearCardTimer(); });
           Nenhum card encontrado neste deck.
         </div>
         <div v-if="currentCard" class="flashcard-area">
-          <Flashcard :cardData="currentCard" :key="currentCard.id" :timerValue="cardTimerValue"
-            :isTimerPaused="isCardTimerPaused" @answered="handleCardAnswered" @skipNext="handleSkipNext"
-            @skipPrev="handleSkipPrev" @flipped="handleFlashcardFlipped" @frontShown="handleFlashcardFrontShown" />
+          <Flashcard 
+            :cardData="currentCard" 
+            :key="currentCard.id" 
+            :timerValue="cardTimerValue"       
+            :isTimerPaused="isCardTimerPaused" 
+            @answered="handleCardAnswered" 
+            @skipNext="handleSkipNext"
+            @skipPrev="handleSkipPrev" 
+            @flipped="handleFlashcardFlipped" 
+            @frontShown="handleFlashcardFrontShown" />
         </div>
         <div v-if="currentCard" class="navigation-controls">
           <button @click="prevCard" :disabled="currentCardIndex === 0">Anterior</button>
@@ -173,8 +179,7 @@ onUnmounted(() => { clearCardTimer(); });
 </template>
 
 <style>
-html,
-body {
+html, body {
   height: 100%;
   margin: 0;
   background-color: var(--bg-color);
@@ -195,61 +200,35 @@ body {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  /* align-items: center; O AppHeader e o main-view-wrapper cuidam do alinhamento/largura */
-  padding: 0;
-  /* Sem padding aqui, os filhos controlam */
+  align-items: center; 
+  padding: 0; 
   box-sizing: border-box;
-  overflow-y: hidden;
-  /* O scroll principal será dentro do .main-view-wrapper */
+  overflow-y: hidden; 
 }
 
 #app-container:not(.studying-active) .content-area {
-  /* Quando não está estudando, o content-area pode ter seu próprio scroll se 
-     o header + main-view-wrapper forem maiores que a tela.
-     O main-view-wrapper terá o scroll para a lista de decks. */
-  overflow-y: auto;
-  padding: 20px;
-  /* Padding geral quando não está estudando */
-  align-items: center;
-  /* Centraliza o AppHeader e o main-view-wrapper */
+  overflow-y: auto; 
+  padding: 20px; 
 }
 
-.main-view-wrapper {
+/* Wrapper para o AppHeader e DeckSelector na tela inicial */
+#app-container:not(.studying-active) .main-view-wrapper { /* Aplicar max-width ao wrapper do DeckSelector */
   width: 100%;
-  max-width: 900px;
+  max-width: 900px; /* Largura máxima para o conteúdo principal */
   display: flex;
   flex-direction: column;
-  /* align-items: center; Os filhos usarão width: 100% */
-  flex-grow: 1;
-  min-height: 0;
-  /* Ajuda o flex-grow com overflow */
-  /* overflow: hidden;  Comentado, o DeckSelector controla seu scroll */
+  flex-grow: 1; /* Para ocupar espaço vertical */
+  min-height: 0; /* Ajuda flex-grow com overflow */
 }
-
-header.app-header {
-  /* Estilo para o componente AppHeader */
+/* AppHeader quando não está estudando */
+#app-container:not(.studying-active) header.app-header {
   width: 100%;
-  /* Ocupa a largura do .content-area (ou max-width do .main-view-wrapper se dentro dele) */
-  margin-bottom: 20px;
+  max-width: 900px; /* Mesma largura máxima do wrapper abaixo */
+  margin: 0 auto 20px auto; /* Centraliza e dá margem inferior */
   flex-shrink: 0;
 }
-
-/* Se AppHeader estiver fora do .main-view-wrapper, ele não pegará o max-width: 900px.
-   Para que ele tenha a mesma largura que o DeckSelector, ele precisa estar DENTRO do .main-view-wrapper
-   ou o .main-view-wrapper só envolver o DeckSelector e o AppHeader ter seu próprio max-width.
-   Vamos ajustar o template para que AppHeader esteja fora do main-view-wrapper mas dentro do .content-area */
-
-/* Ajuste no template: AppHeader é irmão do main-view-wrapper */
-#app-container:not(.studying-active) .content-area>header.app-header {
-  width: 100%;
-  max-width: 900px;
-  /* Para alinhar com o DeckSelector */
-  margin: 0 auto 20px auto;
-  /* Centraliza e dá margem inferior */
-}
-
-
-.main-view-wrapper>.deck-selector-container {
+/* DeckSelector dentro do main-view-wrapper */
+.main-view-wrapper > .deck-selector-container {
   width: 100%;
   flex-grow: 1;
   display: flex;
@@ -275,78 +254,63 @@ header.app-header {
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s, color 0.2s;
 }
-
 .theme-toggle-button.study-mode-theme-toggle:hover {
   background-color: var(--button-primary-hover-bg-color);
   color: white;
 }
-
 .theme-toggle-button.study-mode-theme-toggle:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
 
-/* Estilos para o modo de estudo ativo */
 .deck-active-container {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 20px; 
   box-sizing: border-box;
   background-color: var(--bg-color);
   position: relative;
 }
 
 .study-header-controls {
-  width: 100%;
+  width: 100%; 
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
-  position: relative;
+  position: relative; 
   z-index: 10;
 }
 
 .deck-active-container h2 {
   color: var(--primary-color);
-  margin-top: 0;
+  margin-top: 0; 
   margin-bottom: 10px;
   text-align: center;
   font-size: 1.6em;
   font-weight: 500;
   flex-shrink: 0;
   width: 100%;
-  padding: 0 50px;
+  padding: 0 50px; 
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.card-timer-display {
-  margin-bottom: 10px;
-  font-size: 0.9em;
-  color: var(--text-color);
-  background-color: rgba(128, 128, 128, 0.1);
-  padding: 5px 10px;
-  border-radius: 4px;
-  flex-shrink: 0;
-  height: 28px;
-  line-height: 18px;
-  min-width: 80px;
-  text-align: center;
-}
+/* REMOVIDO o estilo para .card-timer-display que estava aqui */
 
 .flashcard-area {
   width: 100%;
-  flex-grow: 1; /* Ocupa o espaço vertical disponível */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centraliza o card verticalmente na área */
-  align-items: center;   /* Centraliza o card horizontalmente */
+  justify-content: center;
+  align-items: center;
   overflow: hidden; 
   margin-bottom: 10px;
 }
@@ -375,18 +339,15 @@ header.app-header {
   align-items: center;
   transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
-
 .back-button.icon-button:hover {
   background-color: rgba(128, 128, 128, 0.1);
   border-color: var(--input-border-color);
   color: var(--primary-color);
 }
-
 .back-button.icon-button:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
-
 .back-button.icon-button .action-icon {
   width: 20px;
   height: 20px;
@@ -400,20 +361,16 @@ header.app-header {
   border-radius: 4px;
   cursor: pointer;
 }
-
 .navigation-controls button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
-
 .navigation-controls span {
   margin: 0 15px;
   color: var(--text-color);
 }
 
-.loading-message,
-.error-message,
-.no-cards-message {
+.loading-message, .error-message, .no-cards-message {
   text-align: center;
   padding: 20px;
   margin: auto;
@@ -422,13 +379,11 @@ header.app-header {
   max-width: 500px;
   border-radius: 5px;
 }
-
 .error-message {
   color: var(--color-error);
   background-color: #f8d7da;
   border: 1px solid var(--color-error);
 }
-
 .no-cards-message {
   color: var(--text-color);
   background-color: #e2e3e5;
