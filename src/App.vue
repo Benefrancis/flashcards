@@ -5,10 +5,7 @@ import DeckSelector from './components/DeckSelector.vue';
 import Flashcard from './components/Flashcard.vue';
 import AppHeader from './components/AppHeader.vue'; // AppHeader será modificado para conter logo e botão de tema
 import IconArrowLeft from './components/icons/IconArrowLeft.vue'; // Para o botão de voltar no modo estudo
-// IconSun e IconMoon agora são gerenciados dentro do AppHeader.vue para o botão principal
-// E podem ser importados aqui se usados no botão de tema do modo estudo
-import IconSun from './components/icons/IconSun.vue';   // Para o botão de tema no modo estudo
-import IconMoon from './components/icons/IconMoon.vue'; // Para o botão de tema no modo estudo
+// Para o botão de tema no modo estudo
 import { useMarkdownParser } from './composables/useMarkdownParser';
 import { useTheme } from './composables/useTheme';
 
