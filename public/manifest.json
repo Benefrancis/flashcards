@@ -59,6 +59,78 @@
     "description": "SIEM, SOA, XDR"
   },
   {
+    "id": "iam",
+    "name": "[TI] Identidade e Protocolos Centrais",
+    "file": "quix-gerenciamento-de-identidade-oauth.md",
+    "description": "Oauth2, OIDC, SAML"
+  },
+  {
+    "id": "agile",
+    "name": "[TI] Estimativa Agil",
+    "file": "quix-estimativa-agil.md",
+    "description": "Estimativa Agil"
+  },
+  {
+    "id": "devops",
+    "name": "[TI] DevOps",
+    "file": "quix-devops.md",
+    "description": "DevOps"
+  },
+  {
+    "id": "crisp-dm",
+    "name": "[TI] CRISP-DM",
+    "file": "quix-crisp-dm.md",
+    "description": "CRISP-DM"
+  },
+  {
+    "id": "k8s",
+    "name": "[TI] Kubernets",
+    "file": "quix-containers-k8s.md",
+    "description": "Containers e Kubernets"
+  },
+  {
+    "id": "bkp",
+    "name": "[TI] Backup",
+    "file": "quix-backup.md",
+    "description": "Backup"
+  },
+  {
+    "id": "nist",
+    "name": "[TI] NIST",
+    "file": "quix-nist.md",
+    "description": "NIST"
+  },
+  {
+    "id": "testes",
+    "name": "[TI] Testes",
+    "file": "quix-planejamento-de-testes.md",
+    "description": "Planejamento de Testes"
+  },
+  {
+    "id": "scrum",
+    "name": "[TI] SCRUM",
+    "file": "quix-scrum.md",
+    "description": "SCRUM"
+  },
+  {
+    "id": "storage",
+    "name": "[TI] Storage",
+    "file": "quix-storage.md",
+    "description": "Storage"
+  },
+  {
+    "id": "tcpdump",
+    "name": "[TI] TCPDUMP",
+    "file": "quix-tcpdump.md",
+    "description": "Storage"
+  },
+  {
+    "id": "teraform",
+    "name": "[TI] Terraform e Ansible",
+    "file": "quix-terraform.md",
+    "description": "Terraform e Ansible"
+  },
+   {
     "id": "so-linux",
     "name": "[TI] Linux",
     "file": "quix-sistemas-operacionais-linux.md",
