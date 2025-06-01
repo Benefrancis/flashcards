@@ -29,6 +29,12 @@
     "description": "Redes de Computadores"
   },
   {
+    "id": "python",
+    "name": "[TI] Python",
+    "file": "quix-python.md",
+    "description": "Python"
+  },
+  {
     "id": "ti-redes-stp",
     "name": "[TI] Redes (STP - Spanning Tree Protocol)",
     "file": "quix-spanning-tree-protocol.md",
@@ -111,13 +117,13 @@
   },
   {
     "id": "cacd-conferencia-moscou",
-    "name": "Conferência de Moscou (CACD)",
+    "name": "[CACD] Conferência de Moscou (CACD)",
     "file": "quix-conferencia-de-moscou.md",
     "description": "A conferência de Moscou, realizada em 1949, é um marco importante na história do Direito Internacional e das Relações Internacionais."
   },
   {
     "id": "cacd-conferencia-teera",
-    "name": "Conferência de Teera (CACD)",
+    "name": "[CACD] Conferência de Teera",
     "file": "quix-convencao_teera.md",
     "description": "A Conferência de Teera, realizada em 1945, é um marco importante na história do Direito Internacional e das Relações Internacionais."
   }
