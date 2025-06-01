@@ -34,6 +34,12 @@
     "file": "quix-rede-de-computadores.md",
     "description": "Redes de Computadores"
   },
+    {
+    "id": "gti",
+    "name": "[TI] Gestão de Segurança da Informação",
+    "file": "quix-gestao-de-seguranca-da-Informacao.md",
+    "description": "Gestão de Segurança da Informação: ISO27001/2, NIST e CIS"
+  },
   {
     "id": "python",
     "name": "[TI] Python",
