@@ -26,6 +26,12 @@
     "id": "redes",
     "name": "[TI] Redes",
     "file": "quix-redes.md",
+    "description": "Redes"
+  },
+  {
+    "id": "redes-computadores",
+    "name": "[TI] Redes de Computadores",
+    "file": "quix-rede-de-computadores.md",
     "description": "Redes de Computadores"
   },
   {
@@ -33,6 +39,36 @@
     "name": "[TI] Python",
     "file": "quix-python.md",
     "description": "Python"
+  },
+  {
+    "id": "shel-script",
+    "name": "[TI] Shell Script",
+    "file": "quix-shell-script.md",
+    "description": "Shell Script"
+  },
+  {
+    "id": "sql-no-sql",
+    "name": "[TI] SQL e NoSQL",
+    "file": "quix-sql-e-nosql-database.md",
+    "description": "SQL e NoSQL Databases"
+  },
+  {
+    "id": "siem",
+    "name": "[TI] SIEM",
+    "file": "quix-siem.md",
+    "description": "SIEM, SOA, XDR"
+  },
+  {
+    "id": "so-linux",
+    "name": "[TI] Linux",
+    "file": "quix-sistemas-operacionais-linux.md",
+    "description": "Sistemas Operacionais Linux"
+  },
+  {
+    "id": "so-windows",
+    "name": "[TI] Windows",
+    "file": "quix-sistemas-operacionais-windows.md",
+    "description": "Sistemas Operacionais Windows"
   },
   {
     "id": "ti-redes-stp",
