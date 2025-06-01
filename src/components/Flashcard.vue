@@ -132,7 +132,7 @@ watch(() => props.cardData, (newData, oldData) => {
     <div class="flashcard-inner">  
       <div class="flashcard-front">
         <p class="statement scrollable-content"><span>{{ cardData?.afirmacao }}</span></p>
-        <div class="actions icon-actions">
+        <div class="actions icon-actions" v-if="!isFlipped" >
           <button @click="processAnswer('F')" class="action-button incorrect-button"
             aria-label="Responder Errado (F) ou tecla F">
             <img :src="fImageSrc" alt="Ícone Falso" class="action-button-icon" />

@@ -1,11 +1,11 @@
 <script setup lang="ts">
+// SEU SCRIPT SETUP ATUAL ESTÁ CORRETO E PODE SER MANTIDO
 import type { DeckInfo, FlashcardData } from '@/types';
 import { computed, ref, watch, onUnmounted, type Ref } from 'vue';
 import DeckSelector from './components/DeckSelector.vue';
 import Flashcard from './components/Flashcard.vue';
 import AppHeader from './components/AppHeader.vue';
 import IconArrowLeft from './components/icons/IconArrowLeft.vue';
-// Importações de IconSun/IconMoon para o botão de tema no modo estudo
 import IconSun from './components/icons/IconSun.vue';
 import IconMoon from './components/icons/IconMoon.vue';
 import { useMarkdownParser } from './composables/useMarkdownParser';
@@ -21,7 +21,6 @@ const {
 
 const currentCardIndex = ref(0);
 
-// --- Gerenciamento do Timer do Card (Lógica permanece, exibição vai para Flashcard.vue) ---
 const cardTimerValue = ref(0);
 const cardTimerInterval: Ref<number | undefined> = ref(undefined);
 const isCardTimerPaused = ref(true);
@@ -147,6 +146,7 @@ onUnmounted(() => { clearCardTimer(); });
           </button>
         </div>
         <h2 v-if="selectedDeck">{{ selectedDeck.name }}</h2>
+        
         <div v-if="isLoadingCards" class="loading-message">Carregando cards...</div>
         <div v-if="cardLoadingError" class="error-message">
           Erro ao carregar cards: {{ cardLoadingError }}
@@ -155,6 +155,7 @@ onUnmounted(() => { clearCardTimer(); });
           class="no-cards-message">
           Nenhum card encontrado neste deck.
         </div>
+
         <div v-if="currentCard" class="flashcard-area">
           <Flashcard 
             :cardData="currentCard" 
@@ -167,6 +168,7 @@ onUnmounted(() => { clearCardTimer(); });
             @flipped="handleFlashcardFlipped" 
             @frontShown="handleFlashcardFrontShown" />
         </div>
+
         <div v-if="currentCard" class="navigation-controls">
           <button @click="prevCard" :disabled="currentCardIndex === 0">Anterior</button>
           <span>Card {{ currentCardIndex + 1 }} de {{ currentDeckCards ? currentDeckCards.length : 0 }}</span>
@@ -203,7 +205,7 @@ html, body {
   align-items: center; 
   padding: 0; 
   box-sizing: border-box;
-  overflow-y: hidden; 
+  overflow: hidden; 
 }
 
 #app-container:not(.studying-active) .content-area {
@@ -211,23 +213,20 @@ html, body {
   padding: 20px; 
 }
 
-/* Wrapper para o AppHeader e DeckSelector na tela inicial */
-#app-container:not(.studying-active) .main-view-wrapper { /* Aplicar max-width ao wrapper do DeckSelector */
+#app-container:not(.studying-active) .main-view-wrapper {
   width: 100%;
-  max-width: 900px; /* Largura máxima para o conteúdo principal */
+  max-width: 900px; 
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Para ocupar espaço vertical */
-  min-height: 0; /* Ajuda flex-grow com overflow */
+  flex-grow: 1; 
+  min-height: 0; 
 }
-/* AppHeader quando não está estudando */
 #app-container:not(.studying-active) header.app-header {
   width: 100%;
-  max-width: 900px; /* Mesma largura máxima do wrapper abaixo */
-  margin: 0 auto 20px auto; /* Centraliza e dá margem inferior */
+  max-width: 900px; 
+  margin: 0 auto 20px auto; 
   flex-shrink: 0;
 }
-/* DeckSelector dentro do main-view-wrapper */
 .main-view-wrapper > .deck-selector-container {
   width: 100%;
   flex-grow: 1;
@@ -263,98 +262,72 @@ html, body {
   outline-offset: 2px;
 }
 
+/* Estilos para o modo de estudo ativo */
 .deck-active-container {
   width: 100%;
-  height: 100%;
+  height: 100%; /* Ocupa toda a altura do .content-area */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px; 
+  padding: 15px; /* Padding geral um pouco menor para mobile */
   box-sizing: border-box;
   background-color: var(--bg-color);
-  position: relative;
+  /* position: relative; Não é mais necessário se os filhos usam flex */
 }
 
 .study-header-controls {
   width: 100%; 
-  margin-bottom: 10px;
+  margin-bottom: 8px; 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-shrink: 0;
-  position: relative; 
-  z-index: 10;
+  flex-shrink: 0; /* Não encolhe */
+  /* position: relative; z-index: 10; Não é mais necessário se não há sobreposição complexa */
 }
 
-.deck-active-container h2 {
+.deck-active-container h2 { /* Título do deck */
   color: var(--primary-color);
   margin-top: 0; 
-  margin-bottom: 10px;
+  margin-bottom: 8px; 
   text-align: center;
-  font-size: 1.6em;
+  font-size: 1.3em; 
   font-weight: 500;
   flex-shrink: 0;
   width: 100%;
-  padding: 0 50px; 
+  padding: 0 10px; /* Padding lateral menor para o título não ser cortado pelos botões */
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* REMOVIDO o estilo para .card-timer-display que estava aqui */
-
 .flashcard-area {
   width: 100%;
-  flex-grow: 1;
+  flex-grow: 1; /* FAZ ESTA ÁREA OCUPAR O ESPAÇO VERTICAL DISPONÍVEL */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; 
-  margin-bottom: 10px;
+  justify-content: center; 
+  align-items: center;   
+  overflow: hidden; /* O Flashcard interno terá seu próprio scroll se necessário */
+  margin-bottom: 5px; /* Espaço mínimo antes dos controles de navegação */
+  min-height: 0; /* ESSENCIAL para permitir que .flashcard-area encolha */
 }
 
 .navigation-controls {
-  padding-top: 10px;
-  margin-bottom: 10px;
+  padding-top: 5px; /* Espaço mínimo acima */
+  padding-bottom: 5px; /* Espaço mínimo abaixo, especialmente para mobile */
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 600px;
-  flex-shrink: 0;
+  max-width: 500px; 
+  flex-shrink: 0; /* NÃO ENCOLHE - garante sua altura */
 }
 
-.back-button.icon-button {
-  background-color: transparent;
-  color: var(--secondary-color);
-  border: 1px solid transparent;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-}
-.back-button.icon-button:hover {
-  background-color: rgba(128, 128, 128, 0.1);
-  border-color: var(--input-border-color);
-  color: var(--primary-color);
-}
-.back-button.icon-button:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-.back-button.icon-button .action-icon {
-  width: 20px;
-  height: 20px;
-}
-
+/* Ajustes de tamanho para botões de navegação em mobile */
 .navigation-controls button {
-  padding: 10px 15px;
+  padding: 8px 10px; 
+  font-size: 0.85em; 
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -366,11 +339,28 @@ html, body {
   cursor: not-allowed;
 }
 .navigation-controls span {
-  margin: 0 15px;
+  margin: 0 8px; 
+  font-size: 0.85em; 
   color: var(--text-color);
 }
 
-.loading-message, .error-message, .no-cards-message {
+.back-button.icon-button,
+.study-mode-theme-toggle { /* Aplicando tamanho menor também ao botão de tema no modo estudo */
+  width: 34px; 
+  height: 34px;
+  padding: 4px; 
+}
+.back-button.icon-button .action-icon { /* Se o SVG do IconArrowLeft tiver essa classe */
+  width: 18px;
+  height: 18px;
+}
+.study-mode-theme-toggle span { /* Se estiver usando emojis para sol/lua */
+    font-size: 1em; /* Ajustar tamanho do emoji no botão de tema do modo estudo */
+}
+
+.loading-message,
+.error-message,
+.no-cards-message {
   text-align: center;
   padding: 20px;
   margin: auto;
@@ -379,11 +369,13 @@ html, body {
   max-width: 500px;
   border-radius: 5px;
 }
+
 .error-message {
   color: var(--color-error);
   background-color: #f8d7da;
   border: 1px solid var(--color-error);
 }
+
 .no-cards-message {
   color: var(--text-color);
   background-color: #e2e3e5;

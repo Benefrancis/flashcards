@@ -1,5 +1,17 @@
 [
   {
+    "id": "portugues-cebraspe",
+    "name": "Português (STM)",
+    "file": "portugues-stm.md",
+    "description": "Tópicos comuns de português cobrados pela banca Cebraspe."
+  },
+  {
+    "id": "ti-redes-stp",
+    "name": "[TI] Redes (STP - Spanning Tree Protocol)",
+    "file": "quix-spanning-tree-protocol.md",
+    "description": "Spanning Tree Protocol (STP)"
+  },
+  {
     "id": "raciocinio-logico",
     "name": "Raciocínio Lógico Matemático",
     "file": "quix-logica-matematica.md",
@@ -29,12 +41,7 @@
     "file": "direito_constitucional.md",
     "description": "Questões sobre os fundamentos da República Federativa do Brasil."
   },
-  {
-    "id": "portugues-cebraspe",
-    "name": "Português (STM)",
-    "file": "portugues-stm.md",
-    "description": "Tópicos comuns de português cobrados pela banca Cebraspe."
-  },
+
   {
     "id": "lei-morgan",
     "name": "Lei de Morgan (Cebraspe)",
