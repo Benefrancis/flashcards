@@ -1,27 +1,36 @@
-[  {
-  "id": "arquivologia",
-  "name": "Arquivologia",
-  "file": "quix-arquivologia.md",
-  "description": "Arquivologia"
-},
-{
-  "id": "administracao",
-  "name": "Administração Geral e Pública",
-  "file": "quix-administracao-geral-e-publica.md",
-  "description": "Administração Geral e Pública"
-},
-{
-  "id": "afo",
-  "name": "AFO - Administração Financeira e Orçamentária",
-  "file": "quix-afo.md",
-  "description": "Administração Financeira e Orçamentária"
-},
+[
   {
     "id": "portugues-cebraspe",
     "name": "Português (STM)",
     "file": "portugues-stm.md",
     "description": "Tópicos comuns de português cobrados pela banca Cebraspe."
   },
+  {
+    "id": "l-1540",
+    "name": "Seguro Privado (L-1540)",
+    "file": "quix-l15040-normas-de-seguro-privado.md",
+    "description": "Lei 1540/2024 - Normas de Seguro Privado"
+  },
+  {
+    "id": "siem",
+    "name": "[TI] SIEM",
+    "file": "quix-siem.md",
+    "description": "SIEM, SOA, XDR"
+  },
+  {
+    "id": "iam",
+    "name": "[TI] Identidade e Protocolos Centrais",
+    "file": "quix-gerenciamento-de-identidade-oauth.md",
+    "description": "Oauth2, OIDC, SAML"
+  },
+
+  {
+    "id": "afo",
+    "name": "AFO - Administração Financeira e Orçamentária",
+    "file": "quix-afo.md",
+    "description": "Administração Financeira e Orçamentária"
+  },
+
   {
     "id": "redes",
     "name": "[TI] Redes",
@@ -34,11 +43,17 @@
     "file": "quix-rede-de-computadores.md",
     "description": "Redes de Computadores"
   },
-    {
-    "id": "gti",
+  {
+    "id": "gsti",
     "name": "[TI] Gestão de Segurança da Informação",
     "file": "quix-gestao-de-seguranca-da-Informacao.md",
     "description": "Gestão de Segurança da Informação: ISO27001/2, NIST e CIS"
+  },
+  {
+    "id": "arquivologia",
+    "name": "Arquivologia",
+    "file": "quix-arquivologia.md",
+    "description": "Arquivologia"
   },
   {
     "id": "python",
@@ -58,18 +73,7 @@
     "file": "quix-sql-e-nosql-database.md",
     "description": "SQL e NoSQL Databases"
   },
-  {
-    "id": "siem",
-    "name": "[TI] SIEM",
-    "file": "quix-siem.md",
-    "description": "SIEM, SOA, XDR"
-  },
-  {
-    "id": "iam",
-    "name": "[TI] Identidade e Protocolos Centrais",
-    "file": "quix-gerenciamento-de-identidade-oauth.md",
-    "description": "Oauth2, OIDC, SAML"
-  },
+
   {
     "id": "agile",
     "name": "[TI] Estimativa Agil",
@@ -136,7 +140,7 @@
     "file": "quix-terraform.md",
     "description": "Terraform e Ansible"
   },
-   {
+  {
     "id": "so-linux",
     "name": "[TI] Linux",
     "file": "quix-sistemas-operacionais-linux.md",
@@ -167,7 +171,12 @@
     "file": "quix-logica-matematica.md",
     "description": "Raciocínio Lógico Matemático"
   },
-
+  {
+    "id": "administracao",
+    "name": "Administração Geral e Pública",
+    "file": "quix-administracao-geral-e-publica.md",
+    "description": "Administração Geral e Pública"
+  },
   {
     "id": "ti-tribunal-pdpj-br",
     "name": "[TI] PDPJ-Br (Plataforma Digital do Poder Judiciário Brasileiro)",
