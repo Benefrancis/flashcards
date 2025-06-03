@@ -12,6 +12,48 @@
     "description": "Lei 1540/2024 - Normas de Seguro Privado"
   },
   {
+    "id": "l-9784",
+    "name": "Processo Administrativo (L-9784/99)",
+    "file": "quix-processo-administrativo.md",
+    "description": "Processo Administrativo relacionado à Lei 9784/99"
+  },
+  {
+    "id": "lei-8112-90",
+    "name": "Lei 8112/90 Regime Jurídico dos Servidores Públicos civis da União, das autarquias e das fundações públicas federais.",
+    "file": "quix-lei-8112-90.md",
+    "description": "Dispõe sobre o regime jurídico dos servidores públicos civis da União, das autarquias e das fundações públicas federais."
+  },
+  {
+    "id": "lei-14133-2021",
+    "name": "Lei 14133/2021 - Licitações e Contratos Administrativos",
+    "file": "quix-licitacao.md",
+    "description": "Dispõe sobre as normas gerais de licitação e contratação para a Administração Pública."
+  },
+  {
+    "id": "raciocinio-logico",
+    "name": "Raciocínio Lógico Matemático",
+    "file": "quix-logica-matematica.md",
+    "description": "Raciocínio Lógico Matemático"
+  },
+  {
+    "id": "direito-constitucional",
+    "name": "Direito Constitucional (Fundamentos)",
+    "file": "direito_constitucional.md",
+    "description": "Questões sobre os fundamentos da República Federativa do Brasil."
+  },
+  {
+    "id": "lei-morgan",
+    "name": "Lei de Morgan (Cebraspe)",
+    "file": "quix-lei-de-morgan.md",
+    "description": "Tópicos comuns de Lógica (Leis de Morgan) cobrados pela banca Cebraspe."
+  },
+  {
+    "id": "lei-intro-ndb",
+    "name": "Intro. às normas do direito brasileiro",
+    "file": "quix-lei-de-introducao-normas-direito-brasileiro.md",
+    "description": "Introdução às normas do direito brasileiro."
+  },
+  {
     "id": "siem",
     "name": "[TI] SIEM",
     "file": "quix-siem.md",
@@ -165,12 +207,7 @@
     "file": "quix-protocolos-de-roteamento.md",
     "description": "Redes - Protocolos de Roteamento"
   },
-  {
-    "id": "raciocinio-logico",
-    "name": "Raciocínio Lógico Matemático",
-    "file": "quix-logica-matematica.md",
-    "description": "Raciocínio Lógico Matemático"
-  },
+
   {
     "id": "administracao",
     "name": "Administração Geral e Pública",
@@ -189,19 +226,7 @@
     "file": "quix-ferramentas-de-ia.md",
     "description": "Um conjunto de ferramentas e bibliotecas fundamentais no ecossistema de Ciência de Dados e Inteligência Artificial em Python"
   },
-  {
-    "id": "direito-constitucional",
-    "name": "Direito Constitucional (Fundamentos)",
-    "file": "direito_constitucional.md",
-    "description": "Questões sobre os fundamentos da República Federativa do Brasil."
-  },
 
-  {
-    "id": "lei-morgan",
-    "name": "Lei de Morgan (Cebraspe)",
-    "file": "quix-lei-de-morgan.md",
-    "description": "Tópicos comuns de Lógica (Leis de Morgan) cobrados pela banca Cebraspe."
-  },
   {
     "id": "lei-8457-1992",
     "name": "Lei 8457/92 OJM (Cebraspe)",
@@ -226,18 +251,7 @@
     "file": "quix-acessibilidade.md",
     "description": "Resolução CNJ nº 401/2021 (Diretrizes de acessibilidade e inclusão de pessoas com deficiência nos órgãos do Poder Judiciário )."
   },
-  {
-    "id": "lei-8112-90",
-    "name": "Lei 8112/90 Regime Jurídico dos Servidores Públicos civis da União, das autarquias e das fundações públicas federais.",
-    "file": "quix-lei-8112-90.md",
-    "description": "Dispõe sobre o regime jurídico dos servidores públicos civis da União, das autarquias e das fundações públicas federais."
-  },
-  {
-    "id": "lei-14133-2021",
-    "name": "Lei 14133/2021 - Licitações e Contratos Administrativos",
-    "file": "quix-licitacao.md",
-    "description": "Dispõe sobre as normas gerais de licitação e contratação para a Administração Pública."
-  },
+
   {
     "id": "cacd-conferencia-moscou",
     "name": "[CACD] Conferência de Moscou (CACD)",
