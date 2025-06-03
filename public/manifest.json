@@ -54,6 +54,12 @@
     "description": "Introdução às normas do direito brasileiro."
   },
   {
+    "id": "controle",
+    "name": "Controle da Administração Pública",
+    "file": "quix-controle-da-administracao-publica.md",
+    "description": "Controle da Administração Pública."
+  },
+  {
     "id": "siem",
     "name": "[TI] SIEM",
     "file": "quix-siem.md",
