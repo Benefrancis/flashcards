@@ -18,6 +18,12 @@
     "description": "Processo Administrativo relacionado à Lei 9784/99"
   },
   {
+    "id": "l-9784",
+    "name": "Ato Administrativo (L-9784/99)",
+    "file": "quix-ato-administrativo.md",
+    "description": "Ato Administrativo à luz da Lei 9784/99"
+  },
+  {
     "id": "lei-8112-90",
     "name": "Lei 8112/90 Regime Jurídico dos Servidores Públicos civis da União, das autarquias e das fundações públicas federais.",
     "file": "quix-lei-8112-90.md",
