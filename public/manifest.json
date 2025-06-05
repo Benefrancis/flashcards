@@ -6,16 +6,34 @@
     "description": "Tópicos comuns de português cobrados pela banca Cebraspe."
   },
   {
+    "id": "logica",
+    "name": "Lógica Matemática",
+    "file": "quix-logica.md",
+    "description": "Lógica Matemética estilo CEBRASPE/CESPE"
+  },
+  {
     "id": "l-1540",
     "name": "Seguro Privado (L-1540)",
     "file": "quix-l15040-normas-de-seguro-privado.md",
     "description": "Lei 1540/2024 - Normas de Seguro Privado"
   },
   {
+    "id": "ti-padroes-projeto",
+    "name": "Design Patterns",
+    "file": "10_quix_Padroes_Projeto_Design_Patterns.md",
+    "description": "Padrões de Projeto"
+  },
+  {
     "id": "l-9784",
     "name": "Processo Administrativo (L-9784/99)",
     "file": "quix-processo-administrativo.md",
     "description": "Processo Administrativo relacionado à Lei 9784/99"
+  },
+  {
+    "id": "estatistica",
+    "name": "Estatística",
+    "file": "quix-estatistica.md",
+    "description": "Estatística"
   },
   {
     "id": "ato-adminsitrativo",
