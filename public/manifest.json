@@ -16,11 +16,18 @@
     "name": "Seguro Privado (L-1540)",
     "file": "quix-l15040-normas-de-seguro-privado.md",
     "description": "Lei 1540/2024 - Normas de Seguro Privado"
-  },  {
+  },  
+  {
     "id": "lc-109",
     "name": "Previdência Complementar Aberta (LC 109/2001)",
     "file": "quix-prev-complementar-aberta.md",
     "description": "Previdência Complementar Aberta (LC 109/2001)"
+  },
+  {
+    "id": "lc-14332",
+    "name": "Captalização e Distribuição de Prêmios (LC 14332/2022)",
+    "file": "quix-captalizacao.md",
+    "description": "Lei 14332/2022 - Captalização e Distribuição de Prêmios"
   },
   {
     "id": "ml-ops",
