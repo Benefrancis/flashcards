@@ -18,6 +18,12 @@
     "description": "Lei 1540/2024 - Normas de Seguro Privado"
   },
   {
+    "id": "ml-ops",
+    "name": "MLOps",
+    "file": "quix-mlops.md",
+    "description": "MLOps"
+  },
+  {
     "id": "ti-padroes-projeto",
     "name": "Design Patterns",
     "file": "10_quix_Padroes_Projeto_Design_Patterns.md",
