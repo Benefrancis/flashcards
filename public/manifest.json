@@ -27,7 +27,19 @@
     "id": "lc-14332",
     "name": "Captalização e Distribuição de Prêmios (LC 14332/2022)",
     "file": "quix-captalizacao.md",
-    "description": "Lei 14332/2022 - Captalização e Distribuição de Prêmios"
+    "description": "Planos com Cobertura por Sobrevivência e Distribuição de Prêmios (LC 14332/2022)"
+  },
+  {
+    "id": "pvbl-vgbl",
+    "name": "Planos com Cobertura por Sobrevivência",
+    "file": "quix-pgbl-vgbl.md",
+    "description": "PGBL (Plano Gerador de Benefício Livre) e o VGBL (Vida Gerador de Benefício Livre)"
+  },
+  {
+    "id": "LRS",
+    "name": "Letra de Risco de Seguro (LRS)",
+    "file": "quix-lei-14430-letra-de-risco-de-seguro.md",
+    "description": "Letra de Risco de Seguro (LRS)"
   },
   {
     "id": "ml-ops",
