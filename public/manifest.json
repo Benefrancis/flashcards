@@ -42,6 +42,12 @@
     "description": "Letra de Risco de Seguro (LRS)"
   },
   {
+    "id": "ids-ips",
+    "name": "Detecção de Incidentes de Segurança (IDS/IPS)",
+    "file": "quix-deteccao-de-intrusao.md",
+    "description": "Detecção de Incidentes de Segurança (IDS/IPS)"
+  },
+  {
     "id": "ml-ops",
     "name": "MLOps",
     "file": "quix-mlops.md",
