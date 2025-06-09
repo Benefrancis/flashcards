@@ -7,69 +7,15 @@
   },
   {
     "id": "logica",
-    "name": "Lógica Matemática",
+    "name": "Raciocínio Lógico Matemático",
     "file": "quix-logica.md",
-    "description": "Lógica Matemética estilo CEBRASPE/CESPE"
-  },
-  {
-    "id": "l-1540",
-    "name": "Seguro Privado (L-1540)",
-    "file": "quix-l15040-normas-de-seguro-privado.md",
-    "description": "Lei 1540/2024 - Normas de Seguro Privado"
-  },  
-  {
-    "id": "lc-109",
-    "name": "Previdência Complementar Aberta (LC 109/2001)",
-    "file": "quix-prev-complementar-aberta.md",
-    "description": "Previdência Complementar Aberta (LC 109/2001)"
-  },
-  {
-    "id": "lc-14332",
-    "name": "Captalização e Distribuição de Prêmios (LC 14332/2022)",
-    "file": "quix-captalizacao.md",
-    "description": "Planos com Cobertura por Sobrevivência e Distribuição de Prêmios (LC 14332/2022)"
-  },
-  {
-    "id": "pvbl-vgbl",
-    "name": "Planos com Cobertura por Sobrevivência",
-    "file": "quix-pgbl-vgbl.md",
-    "description": "PGBL (Plano Gerador de Benefício Livre) e o VGBL (Vida Gerador de Benefício Livre)"
-  },
-  {
-    "id": "LRS",
-    "name": "Letra de Risco de Seguro (LRS)",
-    "file": "quix-lei-14430-letra-de-risco-de-seguro.md",
-    "description": "Letra de Risco de Seguro (LRS)"
-  },
-  {
-    "id": "ids-ips",
-    "name": "Detecção de Incidentes de Segurança (IDS/IPS)",
-    "file": "quix-deteccao-de-intrusao.md",
-    "description": "Detecção de Incidentes de Segurança (IDS/IPS)"
-  },
-  {
-    "id": "ml-ops",
-    "name": "MLOps",
-    "file": "quix-mlops.md",
-    "description": "MLOps"
-  },
-  {
-    "id": "ti-padroes-projeto",
-    "name": "Design Patterns",
-    "file": "10_quix_Padroes_Projeto_Design_Patterns.md",
-    "description": "Padrões de Projeto"
+    "description": "Raciocínio Lógico Matemático CEBRASPE/CESPE"
   },
   {
     "id": "l-9784",
     "name": "Processo Administrativo (L-9784/99)",
     "file": "quix-processo-administrativo.md",
     "description": "Processo Administrativo relacionado à Lei 9784/99"
-  },
-  {
-    "id": "estatistica",
-    "name": "Estatística",
-    "file": "quix-estatistica.md",
-    "description": "Estatística"
   },
   {
     "id": "ato-adminsitrativo",
@@ -89,12 +35,26 @@
     "file": "quix-licitacao.md",
     "description": "Dispõe sobre as normas gerais de licitação e contratação para a Administração Pública."
   },
+
   {
-    "id": "raciocinio-logico",
-    "name": "Raciocínio Lógico Matemático",
-    "file": "quix-logica-matematica.md",
-    "description": "Raciocínio Lógico Matemático"
+    "id": "ids-ips",
+    "name": "Detecção de Incidentes de Segurança (IDS/IPS)",
+    "file": "quix-deteccao-de-intrusao.md",
+    "description": "Detecção de Incidentes de Segurança (IDS/IPS)"
   },
+  {
+    "id": "ml-ops",
+    "name": "MLOps",
+    "file": "quix-mlops.md",
+    "description": "MLOps"
+  },
+  {
+    "id": "ti-padroes-projeto",
+    "name": "Design Patterns",
+    "file": "10_quix_Padroes_Projeto_Design_Patterns.md",
+    "description": "Padrões de Projeto"
+  },
+
   {
     "id": "direito-constitucional",
     "name": "Direito Constitucional (Fundamentos)",
