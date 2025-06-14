@@ -12,6 +12,12 @@
     "description": "Raciocínio Lógico Matemático CEBRASPE/CESPE"
   },
   {
+    "id": "lei-8429",
+    "name": "Improbidade Administrativa",
+    "file": "quix-improbidade-administrativa.md",
+    "description": "Improbidade Administrativa - Lei 8429/92"
+  },
+  {
     "id": "l-9784",
     "name": "Processo Administrativo (L-9784/99)",
     "file": "quix-processo-administrativo.md",
