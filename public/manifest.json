@@ -12,6 +12,12 @@
     "description": "Raciocínio Lógico Matemático CEBRASPE/CESPE"
   },
   {
+    "id": "acessibilidade",
+    "name": "Acessibilidade",
+    "file": "quix-acessibilidade.md",
+    "description": "Noções sobre Direitos das Pessoas com Deficiência: Resolução CSJT nº 386/2024 (Art. 6º). Lei nº 13.146/2015, Lei nº 11.126/2005, Lei nº 10.098/2000, Decreto 5.296/2004, Lei nº 10.048/2000, Lei nº 8.899/1994, Decreto 3.691/2000, Lei nº 8.160/1991, Lei nº 7.853/1989, Decreto 3.298/1999."
+  },
+  {
     "id": "lei-8429",
     "name": "Improbidade Administrativa",
     "file": "quix-improbidade-administrativa.md",
