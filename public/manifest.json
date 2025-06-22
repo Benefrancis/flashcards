@@ -12,6 +12,12 @@
     "description": "Raciocínio Lógico Matemático CEBRASPE/CESPE"
   },
   {
+    "id": "cacd-politica-internacional",
+    "name": "Política Internacional",
+    "file": "quix-politica-internacional.md",
+    "description": "Política Internacional para o CACD"
+  },
+  {
     "id": "acessibilidade",
     "name": "Acessibilidade",
     "file": "quix-acessibilidade.md",
