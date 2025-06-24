@@ -18,6 +18,12 @@
     "description": "Política Internacional para o CACD"
   },
   {
+    "id": "marcos-politica-externa",
+    "name": "Marcos da Política Externa Brasileira (1945–2024)",
+    "file": "quix-tratados.md",
+    "description": "Marcos da Política Externa Brasileira (1945–2024)"
+  },
+  {
     "id": "acessibilidade",
     "name": "Acessibilidade",
     "file": "quix-acessibilidade.md",
