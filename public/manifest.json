@@ -11,11 +11,24 @@
     "file": "quix-penal-geral.md",
     "description": "Direito Penal - Parte Geral "
   },
+
+  {
+    "id": "afo",
+    "name": "AFO - Administração Financeira e Orçamentária",
+    "file": "quix-afo.md",
+    "description": "Administração Financeira e Orçamentária"
+  },
   {
     "id": "acessibilidade",
     "name": "Acessibilidade",
     "file": "quix-acessibilidade.md",
     "description": "Noções sobre Direitos das Pessoas com Deficiência: Resolução CSJT nº 386/2024 (Art. 6º). Lei nº 13.146/2015, Lei nº 11.126/2005, Lei nº 10.098/2000, Decreto 5.296/2004, Lei nº 10.048/2000, Lei nº 8.899/1994, Decreto 3.691/2000, Lei nº 8.160/1991, Lei nº 7.853/1989, Decreto 3.298/1999."
+  },
+  {
+    "id": "controle",
+    "name": "Controle da Administração Pública",
+    "file": "quix-controle-da-administracao-publica.md",
+    "description": "Controle da Administração Pública."
   },
   {
     "id": "lei-8429",
@@ -109,12 +122,7 @@
     "file": "quix-lei-de-introducao-normas-direito-brasileiro.md",
     "description": "Introdução às normas do direito brasileiro."
   },
-  {
-    "id": "controle",
-    "name": "Controle da Administração Pública",
-    "file": "quix-controle-da-administracao-publica.md",
-    "description": "Controle da Administração Pública."
-  },
+
   {
     "id": "siem",
     "name": "[TI] SIEM",
@@ -126,13 +134,6 @@
     "name": "[TI] Identidade e Protocolos Centrais",
     "file": "quix-gerenciamento-de-identidade-oauth.md",
     "description": "Oauth2, OIDC, SAML"
-  },
-
-  {
-    "id": "afo",
-    "name": "AFO - Administração Financeira e Orçamentária",
-    "file": "quix-afo.md",
-    "description": "Administração Financeira e Orçamentária"
   },
 
   {
