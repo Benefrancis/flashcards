@@ -6,28 +6,10 @@
     "description": "Tópicos comuns de português cobrados pela banca Cebraspe."
   },
   {
-    "id": "leg-pf",
-    "name": "LEGISLAÇÃO APLICADA À POLÍCIA FEDERAL",
-    "file": "quix-legislacao-pf.md",
-    "description": "Legislação da Polícia Federal 1 Lei nº 14.967/2024: institui o estatuto da segurança privada e da segurança das instituições financeiras, e dá outras providências. 2 Lei nº 10.357/2001: estabelece normas de controle e fiscalização sobre produtos químicos que direta ou indiretamente possam ser destinados à elaboração ilícita de substâncias entorpecentes, psicotrópicas ou que determinem dependência física ou psíquica, e dá outras providências. 3 Lei nº 13.445/2017 (Lei de Migração). 4 Lei nº 10.826/2003: Estatuto do Desarmamento. 5 Lei nº 12.830/2013: dispõe sobre a investigação criminal conduzida pelo delegado de polícia."
-  },
-  {
-    "id": "logica",
-    "name": "Raciocínio Lógico Matemático",
-    "file": "quix-logica-matematica.md",
-    "description": "Raciocínio Lógico Matemático CEBRASPE/CESPE"
-  },
-  {
-    "id": "cacd-politica-internacional",
-    "name": "Política Internacional",
-    "file": "quix-politica-internacional.md",
-    "description": "Política Internacional para o CACD"
-  },
-  {
-    "id": "marcos-politica-externa",
-    "name": "Marcos da Política Externa Brasileira (1945–2024)",
-    "file": "quix-tratados.md",
-    "description": "Marcos da Política Externa Brasileira (1945–2024)"
+    "id": "penal-geral",
+    "name": "Dir. Penal (Parte Geral)",
+    "file": "quix-penal-geral.md",
+    "description": "Direito Penal - Parte Geral "
   },
   {
     "id": "acessibilidade",
@@ -64,6 +46,30 @@
     "name": "Lei 14133/2021 - Licitações e Contratos Administrativos",
     "file": "quix-licitacao.md",
     "description": "Dispõe sobre as normas gerais de licitação e contratação para a Administração Pública."
+  },
+  {
+    "id": "leg-pf",
+    "name": "LEGISLAÇÃO APLICADA À POLÍCIA FEDERAL",
+    "file": "quix-legislacao-pf.md",
+    "description": "Legislação da Polícia Federal 1 Lei nº 14.967/2024: institui o estatuto da segurança privada e da segurança das instituições financeiras, e dá outras providências. 2 Lei nº 10.357/2001: estabelece normas de controle e fiscalização sobre produtos químicos que direta ou indiretamente possam ser destinados à elaboração ilícita de substâncias entorpecentes, psicotrópicas ou que determinem dependência física ou psíquica, e dá outras providências. 3 Lei nº 13.445/2017 (Lei de Migração). 4 Lei nº 10.826/2003: Estatuto do Desarmamento. 5 Lei nº 12.830/2013: dispõe sobre a investigação criminal conduzida pelo delegado de polícia."
+  },
+  {
+    "id": "logica",
+    "name": "Raciocínio Lógico Matemático",
+    "file": "quix-logica-matematica.md",
+    "description": "Raciocínio Lógico Matemático CEBRASPE/CESPE"
+  },
+  {
+    "id": "cacd-politica-internacional",
+    "name": "Política Internacional",
+    "file": "quix-politica-internacional.md",
+    "description": "Política Internacional para o CACD"
+  },
+  {
+    "id": "marcos-politica-externa",
+    "name": "Marcos da Política Externa Brasileira (1945–2024)",
+    "file": "quix-tratados.md",
+    "description": "Marcos da Política Externa Brasileira (1945–2024)"
   },
 
   {
