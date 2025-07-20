@@ -11,7 +11,12 @@
     "file": "quix-penal-geral.md",
     "description": "Direito Penal - Parte Geral "
   },
-
+  {
+    "id": "geografia",
+    "name": "Geografia",
+    "file": "quix-geografia.md",
+    "description": "Geografia"
+  },
   {
     "id": "afo",
     "name": "AFO - Administração Financeira e Orçamentária",
